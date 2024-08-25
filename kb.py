@@ -1,17 +1,7 @@
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 # Функции Бота:
-# IP Calc
-# mac vendor
-# bit to byte
-# typical command
-# ping
-# tracert
 # чей номер телефона https://apertonet.ru/zvonit/
-# nslookup
-# открыт или закрыт порт
-# режим нейросети
-# get_id
+
 # Клавиатура основного меню
 main_menu_1 = [
     [InlineKeyboardButton(text="🧮 IP Калькулятор", callback_data='ip_calc')],
@@ -23,7 +13,7 @@ main_menu_1 = [
     [InlineKeyboardButton(text="⏩ Дальше ", callback_data='next_menu_2')]]
 
 main_menu_2 = [
-    [InlineKeyboardButton(text="📲 Чей Номер телефона (Оператор связи)", callback_data='phone_number')],
+    [InlineKeyboardButton(text="📲 Чей Номер телефона", callback_data='phone_number')],
     [InlineKeyboardButton(text="🔖 ДНС имя IP", callback_data='nslookup')],
     [InlineKeyboardButton(text="📶 Проверка Портов", callback_data='ports_check')],
     [InlineKeyboardButton(text="🈳 Полезные команды", callback_data='useful_command')],
