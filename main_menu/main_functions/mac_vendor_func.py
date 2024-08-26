@@ -1,5 +1,6 @@
 # https://www.macvendorlookup.com/api/v2/{MAC_Address}
 from aiogram import Router, F, types
+from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
@@ -29,7 +30,7 @@ async def mac_vendor(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=exit_menu_1)
 
 
-@router.message(Mac_vendor_state.user_mac)
+@router.message(Mac_vendor_state.user_mac, ~Command('help','start','get_id','chat_gpt'))
 async def mac_vendor_state(message: Message, state: FSMContext):
     if is_valid_mac(str(message.text)):
         try:
