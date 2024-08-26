@@ -7,4 +7,4 @@ from .main_functions import router as main_functions_router
 
 router = Router()
 
-router.include_routers(commands_router, main_functions_router)
+router.include_routers(main_functions_router,commands_router,)
