@@ -25,6 +25,7 @@ class Mac_vendor_state(StatesGroup):
 @router.callback_query(F.data == 'mac_vendor')
 async def mac_vendor(callback: CallbackQuery, state: FSMContext):
     await state.clear()
+    await callback.answer(cache_time=1)
     await state.set_state(Mac_vendor_state.user_mac)
     await callback.message.answer('Напишите MAC-Адрес, который вы хотите опознать',
                                   reply_markup=exit_menu_1)

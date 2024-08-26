@@ -23,10 +23,9 @@ main_menu_2 = [
 
 # Клавиатура выхода в основное меню
 exit_menu_1 = [[InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='back_menu_1')]]
-
 exit_menu_2 = [[InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='next_menu_2')]]
 # Запуск Клавиатуры основного меню
-main_menu_1 = InlineKeyboardMarkup(inline_keyboard=main_menu_1,)
+main_menu_1 = InlineKeyboardMarkup(inline_keyboard=main_menu_1)
 main_menu_2 = InlineKeyboardMarkup(inline_keyboard=main_menu_2)
 # Запуск клавиатуры выхода в основное меню
 exit_menu_1 = InlineKeyboardMarkup(inline_keyboard=exit_menu_1)
