@@ -30,3 +30,11 @@ main_menu_2 = InlineKeyboardMarkup(inline_keyboard=main_menu_2)
 # Запуск клавиатуры выхода в основное меню
 exit_menu_1 = InlineKeyboardMarkup(inline_keyboard=exit_menu_1)
 exit_menu_2 = InlineKeyboardMarkup(inline_keyboard=exit_menu_2)
+
+
+ip_calc_kb = [[InlineKeyboardButton(text="🎭 Открыть Памятку Масок", callback_data='mask_faq')],
+              [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='back_menu_1')]]
+back_to_ip_calc = [[InlineKeyboardButton(text="⬅️ Вернуться в IP Калькулятор", callback_data='ip_calc_back')]]
+
+ip_calc_kb = InlineKeyboardMarkup(inline_keyboard=ip_calc_kb)
+back_to_ip_calc = InlineKeyboardMarkup(inline_keyboard=back_to_ip_calc)

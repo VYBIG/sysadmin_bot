@@ -40,4 +40,5 @@ async def next_menu_2_func(callback: CallbackQuery, state: FSMContext):
 
 @router.message()
 async def echo_handler(message: Message) -> None:
-    await message.answer("Напиши /start, чтобы начать")
+    await message.answer("Напиши /start, чтобы начать \n"
+                         "/help - Для справки ")
