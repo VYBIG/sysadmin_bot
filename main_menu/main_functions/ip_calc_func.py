@@ -72,6 +72,13 @@ async def ip_calc_state(message: Message, state: FSMContext):
     if '/' in message.text:
         try:
             ip = IPv4Interface(message.text)
+            if str(ip.compressed).split("/")[-1] in ['31','32']:
+                min_ip = list(ip.network.hosts())[0]
+                accessable_ip = ip.network.num_addresses
+            else:
+                min_ip = list(ip.network.hosts())[1]
+                accessable_ip = int(ip.network.num_addresses)-2
+                
             await message.answer(f'<b>Ваш IP адрес</b> : <code>{ip.ip}</code>\n\n'
                                  f'<b>Тип вашего IP</b> : <code>{ip_address_type(ip)}</code>\n\n'
                                  f'<b>Короткая Маска</b> : <code>{str(ip.compressed).split("/")[-1]}</code>\n\n'
@@ -80,9 +87,9 @@ async def ip_calc_state(message: Message, state: FSMContext):
                                  f'<b>Общая сеть</b> : <code>{ip.network.network_address}</code>\n\n'
                                  f'<b>Шлюз по Умолчанию</b> : <code>{list(ip.network.hosts())[0]}</code>\n\n'
                                  f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>\n\n'
-                                 f'<b>Минимальный IP</b> : <code>{list(ip.network.hosts())[0]}</code>\n\n'
+                                 f'<b>Минимальный IP</b> : <code>{min_ip}</code>\n\n'
                                  f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>\n\n'
-                                 f'<b>Всего доступных адресов в сети</b> : <code>{int(ip.network.num_addresses)}'
+                                 f'<b>Всего доступных адресов в сети</b> : <code>{accessable_ip}'
                                  f'</code>\n\n'
                                  )
         except AddressValueError:
