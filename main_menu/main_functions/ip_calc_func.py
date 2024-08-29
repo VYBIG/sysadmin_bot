@@ -80,7 +80,7 @@ async def ip_calc_state(message: Message, state: FSMContext):
                                  f'<b>Общая сеть</b> : <code>{ip.network.network_address}</code>\n\n'
                                  f'<b>Шлюз по Умолчанию</b> : <code>{list(ip.network.hosts())[0]}</code>\n\n'
                                  f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>\n\n'
-                                 f'<b>Минимальный IP</b> : <code>{list(ip.network.hosts())[1]}</code>\n\n'
+                                 f'<b>Минимальный IP</b> : <code>{list(ip.network.hosts())[0]}</code>\n\n'
                                  f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>\n\n'
                                  f'<b>Всего доступных адресов в сети</b> : <code>{int(ip.network.num_addresses) - 2}'
                                  f'</code>\n\n'
