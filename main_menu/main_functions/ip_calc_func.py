@@ -3,8 +3,8 @@ from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from kb import exit_menu_1, ip_calc_kb, back_to_ip_calc
-from ipaddress import IPv4Address, ip_address, AddressValueError, \
+from kb import  ip_calc_kb, back_to_ip_calc
+from ipaddress import IPv4Address, AddressValueError, \
     IPv4Interface, NetmaskValueError
 from .mask_FAQ import mask
 import re
@@ -57,7 +57,7 @@ async def ip_calc_back(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(Ip_calc_state.user_ip_address, F.data == 'mask_faq')
-async def ip_calc(callback: CallbackQuery, state: FSMContext):
+async def ip_calc(callback: CallbackQuery):
     await callback.message.edit_text(text=mask, reply_markup=back_to_ip_calc)
 
 
@@ -74,10 +74,10 @@ async def ip_calc_state(message: Message, state: FSMContext):
             ip = IPv4Interface(message.text)
             if str(ip.compressed).split("/")[-1] in ['31','32']:
                 min_ip = list(ip.network.hosts())[0]
-                accessable_ip = ip.network.num_addresses
+                accessible_ip = ip.network.num_addresses
             else:
                 min_ip = list(ip.network.hosts())[1]
-                accessable_ip = int(ip.network.num_addresses)-2
+                accessible_ip = int(ip.network.num_addresses)-2
                 
             await message.answer(f'<b>Ваш IP адрес</b> : <code>{ip.ip}</code>\n\n'
                                  f'<b>Тип вашего IP</b> : <code>{ip_address_type(ip)}</code>\n\n'
@@ -89,7 +89,7 @@ async def ip_calc_state(message: Message, state: FSMContext):
                                  f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>\n\n'
                                  f'<b>Минимальный IP</b> : <code>{min_ip}</code>\n\n'
                                  f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>\n\n'
-                                 f'<b>Всего доступных адресов в сети</b> : <code>{accessable_ip}'
+                                 f'<b>Всего доступных адресов в сети</b> : <code>{accessible_ip}'
                                  f'</code>\n\n'
                                  )
         except AddressValueError:
