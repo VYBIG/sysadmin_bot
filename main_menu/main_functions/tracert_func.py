@@ -47,13 +47,17 @@ async def tracert_fc(message: Message, state: FSMContext):
                 messageID = await message.answer(f'Начинаю Трассировку до {message.text}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 await message.bot.edit_message_text(chat_id=messageID.chat.id,
-                                                    text=trace_route(message.text).decode('utf-8'),
+                                                    text=f"<code>"
+                                                         f"{trace_route(message.text).decode('utf-8')}"
+                                                         f"</code>",
                                                     message_id=messageID.message_id)
         except ipaddress.AddressValueError:
             messageID = await message.answer(f'Начинаю Трассировку до {message.text}')
             await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
             await message.bot.edit_message_text(chat_id=messageID.chat.id,
-                                                text=trace_route(message.text).decode('utf-8'),
+                                                text=f"<code>"
+                                                     f"{trace_route(message.text).decode('utf-8')}"
+                                                     f"</code>",
                                                 message_id=messageID.message_id)
 
     except subprocess.CalledProcessError:
