@@ -1,5 +1,5 @@
 import ipaddress
-# import subprocess
+import subprocess
 from subprocess import check_output, CalledProcessError
 from aiogram import Router, F
 from aiogram.filters import Command
@@ -10,7 +10,7 @@ from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
 
-from kb import udp_tcp_prtl, exit_menu_2
+from kb import udp_tcp_prtl, exit_menu_1
 
 router = Router(name=__name__)
 
@@ -63,24 +63,38 @@ def check_ports_handler(ip_ports: str):
             raise PortsNumberError
 
 
-def udp_ports(ip, ports):
-    return check_output(f'nc -vnzu -w 5 {ip} {ports}', shell=True).decode('utf-8')
+def udp_ports(ip, port):
+    process = subprocess.Popen(f"nc -vnzu -w 5 {ip} {port}",
+                               shell=True, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    process.wait()
+    if process.returncode == 0:
+        return f'Connection to {ip} {port} port [udp/*] succeeded!'
+    else:
+        return f'Connect to {ip} port {port} (udp) failed'
 
 
-def tcp_ports(ip, ports):
-    return check_output(f'nc -vnz -w 5 {ip} {ports}', shell=True).decode('utf-8')
+def tcp_ports(ip, port):
+    process = subprocess.Popen(f"nc -vnz -w 5 {ip} {port}",
+                               shell=True, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    process.wait()
+    if process.returncode == 0:
+        return f'Connection to {ip} {port} port [tcp/*] succeeded!'
+    else:
+        return f'Connect to {ip} port {port} (tcp) failed'
 
 
 @router.callback_query(F.data == 'ports_check')
 async def ports_check(callback: CallbackQuery, state: FSMContext):
-    await callback.message.edit_text('Функция в Разработке!', reply_markup=exit_menu_2)
-    # await state.clear()
-    # await callback.answer(cache_time=1)
-    # await callback.message.answer('Это Сканер Портов, '
-    #                               'выберите по какому '
-    #                               'протоколу нужно сканировать порты',
-    #                               reply_markup=udp_tcp_prtl
-    #                               )
+    # await callback.message.edit_text('Функция в Разработке!', reply_markup=exit_menu_1)
+    await state.clear()
+    await callback.answer(cache_time=1)
+    await callback.message.answer('Это Сканер Портов, '
+                                  'выберите по какому '
+                                  'протоколу нужно сканировать порты',
+                                  reply_markup=udp_tcp_prtl
+                                  )
 
 
 @router.callback_query(F.data == 'udp_callback')
@@ -110,7 +124,7 @@ async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
 @router.message(Ports_check_state.ports_check_state_udp,
                 ~Command('help', 'start', 'get_id', 'chat_gpt'))
 async def ports_check_fc_udp(message: Message, state: FSMContext):
-    ports_check_message = ""
+    ports_check_message_udp = ""
     try:
         check_ports_handler(message.text)
         ip = message.text.split('/')
@@ -121,11 +135,12 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message += f'<code>{udp_ports(ip[0], ports[i])}</code>\n\n'
+                        ports_check_message_udp += f'<code>{udp_ports(ip[0], ports[i])}</code>\n\n'
                     except CalledProcessError:
-                        ports_check_message += f"<code>connect to {ip[0]} port {ports[i]} (udp) timed out:</code>\n\n"
+                        ports_check_message_udp += f"<code>connect to {ip[0]} port {ports[i]} " \
+                                               f"(udp) timed out:</code>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                    text=ports_check_message,
+                                                    text=ports_check_message_udp,
                                                     message_id=message_id.message_id)
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта {ip[-1]} у {ip[0]}')
@@ -139,7 +154,8 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<code>connect to "
-                                                             f"{ip[0]} port {ip[-1]} (udp) timed out:</code>",
+                                                             f"{ip[0]} port {ip[-1]} "
+                                                             f"(udp) timed out:</code>",
                                                         message_id=message_id.message_id)
 
         else:
@@ -158,7 +174,7 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
 @router.message(Ports_check_state.ports_check_state_tcp,
                 ~Command('help', 'start', 'get_id', 'chat_gpt'))
 async def ports_check_fc_tcp(message: Message, state: FSMContext):
-    ports_check_message = ""
+    ports_check_message_tcp = ""
     try:
         check_ports_handler(message.text)
         ip = message.text.split('/')
@@ -169,11 +185,12 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message += f'<code>{tcp_ports(ip[0], ports[i])}</code>\n\n'
+                        ports_check_message_tcp += f'<code>{tcp_ports(ip[0], ports[i])}</code>\n\n'
                     except CalledProcessError:
-                        ports_check_message += f"<code>connect to {ip[0]} port {ports[i]} (tcp) timed out:</code>\n\n"
+                        ports_check_message_tcp += f"<code>connect to {ip[0]} port {ports[i]} " \
+                                               f"(tcp) timed out:</code>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                    text=ports_check_message,
+                                                    text=ports_check_message_tcp,
                                                     message_id=message_id.message_id)
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта {ip[-1]} у {ip[0]}')
@@ -187,7 +204,8 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<code>connect to "
-                                                             f"{ip[0]} port {ip[-1]} (tcp) timed out:</code>",
+                                                             f"{ip[0]} port {ip[-1]} "
+                                                             f"(tcp) timed out:</code>",
                                                         message_id=message_id.message_id)
 
         else:
