@@ -51,5 +51,5 @@ async def ip_info_fc(message: Message, state: FSMContext):
     except AddressValueError:
         await message.answer('Не верный формат IP')
     except:
-        await message.answer('Что-то пошло не  так попробуй еще раз')
+        await message.answer('О данном IP нету информации')
     await state.clear()
