@@ -10,7 +10,7 @@ from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
 
-from kb import udp_tcp_prtl
+from kb import udp_tcp_prtl, exit_menu_2
 
 router = Router(name=__name__)
 
@@ -73,13 +73,14 @@ def tcp_ports(ip, ports):
 
 @router.callback_query(F.data == 'ports_check')
 async def ports_check(callback: CallbackQuery, state: FSMContext):
-    await state.clear()
-    await callback.answer(cache_time=1)
-    await callback.message.answer('Это Сканер Портов, '
-                                  'выберите по какому '
-                                  'протоколу нужно сканировать порты',
-                                  reply_markup=udp_tcp_prtl
-                                  )
+    await callback.message.edit_text('Функция в Разработке!', reply_markup=exit_menu_2)
+    # await state.clear()
+    # await callback.answer(cache_time=1)
+    # await callback.message.answer('Это Сканер Портов, '
+    #                               'выберите по какому '
+    #                               'протоколу нужно сканировать порты',
+    #                               reply_markup=udp_tcp_prtl
+    #                               )
 
 
 @router.callback_query(F.data == 'udp_callback')
