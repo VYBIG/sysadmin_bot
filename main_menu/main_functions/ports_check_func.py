@@ -87,7 +87,8 @@ async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ports_check_state.ports_check_state_udp)
-    await callback.message.edit_text('Напишите IP который вы хотите просканировать и порт через /\n'
+    await callback.message.edit_text('Сканирование будет по протоколу <b>UDP</b>\n'
+                                     'Напишите IP который вы хотите просканировать и порт через /\n'
                                      'Либо напишите порты через -\n'
                                      'Пример - (185.16.25.150/22) либо (185.16.25.150/20-22)')
 
@@ -97,8 +98,9 @@ async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ports_check_state.ports_check_state_tcp)
-    await callback.message.edit_text('Напишите IP который вы хотите просканировать и порт через /\n'
-                                     'Либо напишите порты через -\n'
+    await callback.message.edit_text('Сканирование будет по протоколу <b>TCP</b>!\n'
+                                     'Напишите IP который вы хотите просканировать \nи порт через <b>/</b>\n'
+                                     'Либо напишите порты через <b>-</b>\n'
                                      'Пример - (185.16.25.150/22) либо диапазон (185.16.25.150/20-22)'
                                      'Диапазон не больше 5 портов')
 
@@ -112,9 +114,9 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
         check_ports_handler(message.text)
         ip = message.text.split('/')
         if IPv4Address(ip[0]).is_global:
-            message_id = await message.answer(f'Начинаю сканирование портов {ip[-1]} у {ip[0]}')
-            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING, request_timeout=7)
             if '-' in ip[-1]:
+                message_id = await message.answer(f'Начинаю сканирование портов {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
@@ -125,6 +127,8 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                                                     text=ports_check_message,
                                                     message_id=message_id.message_id)
             else:
+                message_id = await message.answer(f'Начинаю сканирование порта {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 try:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<code>"
@@ -158,9 +162,9 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
         check_ports_handler(message.text)
         ip = message.text.split('/')
         if IPv4Address(ip[0]).is_global:
-            message_id = await message.answer(f'Начинаю сканирование портов {ip[-1]} у {ip[0]}')
-            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING, request_timeout=7)
             if '-' in ip[-1]:
+                message_id = await message.answer(f'Начинаю сканирование портов {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
@@ -171,6 +175,8 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                                                     text=ports_check_message,
                                                     message_id=message_id.message_id)
             else:
+                message_id = await message.answer(f'Начинаю сканирование порта {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 try:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<code>"
