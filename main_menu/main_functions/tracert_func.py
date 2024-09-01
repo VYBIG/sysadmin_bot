@@ -15,7 +15,7 @@ router = Router(name=__name__)
 
 
 def check(host):
-    return subprocess.check_output(f'ping -c 1 {host}',shell=True)
+    return subprocess.check_output(f'host {host}',shell=True)
 
 
 class Tracert_state(StatesGroup):
