@@ -39,9 +39,7 @@ async def ip_calc(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Ip_calc_state.user_ip_address)
     if F.data == 'ip_calc_back':
         await callback.message.answer('Это IP Калькулятор 🧮\n\n\n'
-                                      'Введите IP в формате IP/маска 🔢\n'
-                                      'Либо введи IP без маски ℹ️\n'
-                                      '(Вам будут предложены варианты масок 🎭)',
+                                      'Введите IP в формате IP/маска 🔢/🎭)\n',
                                       reply_markup=ip_calc_kb)
 
 
