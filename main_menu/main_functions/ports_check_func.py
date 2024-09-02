@@ -134,10 +134,10 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message_udp += f'<code>{udp_ports(ip[0], ports[i])}</code>\n\n'
+                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0], ports[i])}</blockquote>\n\n'
                     except CalledProcessError:
-                        ports_check_message_udp += f"<code>connect to {ip[0]} port {ports[i]} " \
-                                               f"(udp) timed out:</code>\n\n"
+                        ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                                               f"(udp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_udp,
                                                     message_id=message_id.message_id)
@@ -146,15 +146,15 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 try:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                        text=f"<code>"
+                                                        text=f"<blockquote>"
                                                              f"{udp_ports(ip[0], ip[-1])}"
-                                                             f"</code>",
+                                                             f"</blockquote>",
                                                         message_id=message_id.message_id)
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                        text=f"<code>connect to "
+                                                        text=f"<blockquote>connect to "
                                                              f"{ip[0]} port {ip[-1]} "
-                                                             f"(udp) timed out:</code>",
+                                                             f"(udp) timed out:</blockquote>",
                                                         message_id=message_id.message_id)
 
         else:
@@ -184,10 +184,10 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message_tcp += f'<code>{tcp_ports(ip[0], ports[i])}</code>\n\n'
+                        ports_check_message_tcp += f'<blockquote>{tcp_ports(ip[0], ports[i])}</blockquote>\n\n'
                     except CalledProcessError:
-                        ports_check_message_tcp += f"<code>connect to {ip[0]} port {ports[i]} " \
-                                               f"(tcp) timed out:</code>\n\n"
+                        ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                                               f"(tcp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_tcp,
                                                     message_id=message_id.message_id)
@@ -196,15 +196,15 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
                 try:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                        text=f"<code>"
+                                                        text=f"<blockquote>"
                                                              f"{tcp_ports(ip[0], ip[-1])}"
-                                                             f"</code>",
+                                                             f"</blockquote>",
                                                         message_id=message_id.message_id)
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
-                                                        text=f"<code>connect to "
+                                                        text=f"<blockquote>connect to "
                                                              f"{ip[0]} port {ip[-1]} "
-                                                             f"(tcp) timed out:</code>",
+                                                             f"(tcp) timed out:</blockquote>",
                                                         message_id=message_id.message_id)
 
         else:
