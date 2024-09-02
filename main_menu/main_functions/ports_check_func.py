@@ -104,7 +104,7 @@ async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Ports_check_state.ports_check_state_udp)
     await callback.message.edit_text('Сканирование будет по <b>UDP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
-                                     'Пример - (185.16.25.150/22) либо диапазон (185.16.25.150/20-22)'
+                                     'Пример - (185.16.25.150/22) \nлибо диапазон (185.16.25.150/20-22)'
                                      'Диапазон не больше 5 портов')
 
 
@@ -115,7 +115,7 @@ async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Ports_check_state.ports_check_state_tcp)
     await callback.message.edit_text('Сканирование будет по <b>TCP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
-                                     'Пример - (185.16.25.150/22) либо диапазон (185.16.25.150/20-22)'
+                                     'Пример - (185.16.25.150/22) \nлибо диапазон (185.16.25.150/20-22)'
                                      'Диапазон не больше 5 портов')
 
 
