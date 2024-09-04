@@ -7,7 +7,7 @@ from aiogram.fsm.state import StatesGroup, State
 import requests
 import re
 import json
-from kb import exit_menu_1
+from kb import exit_menu_1,back_to_main_menu
 
 session = requests.Session()
 router = Router(name=__name__)
@@ -27,21 +27,24 @@ async def mac_vendor(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Mac_vendor_state.user_mac)
-    await callback.message.answer('Напишите MAC-Адрес, который вы хотите опознать',
-                                  reply_markup=exit_menu_1)
+    await callback.message.answer('Напишите MAC-Адрес, который вы хотите опознать:')
 
 
-@router.message(Mac_vendor_state.user_mac, ~Command('help','start','get_id','chat_gpt'))
+@router.message(Mac_vendor_state.user_mac, ~Command('help','start','get_id','chat_gpt','cancel'))
 async def mac_vendor_state(message: Message, state: FSMContext):
     if is_valid_mac(str(message.text)):
         try:
             mac = session.get(url=f'https://www.macvendorlookup.com/api/v2/{str(message.text)}')
             mac_desc = mac.json()[0]
-            await message.answer(text=f"Ваш Мак : {str(message.text)}\n"
-                                 f"Компания : {str(mac_desc['company'])}\n"
-                                 f"Адрес : {str(mac_desc['addressL1'])}\n")
+            await message.answer(text=f"Ваш Мак : <code>{str(message.text)}</code>\n"
+                                 f"Компания : <code>{str(mac_desc['company'])}</code>\n"
+                                 f"Адрес : <code>{str(mac_desc['addressL1'])}</code>\n"
+                                 , reply_markup=back_to_main_menu)
         except:
-            await message.answer('Мак Адрес не найден')
+            await message.answer('<b>Мак Адрес не найден</b> ⁉️\n'
+                                 'Повторите ввод:',
+                                 reply_markup=back_to_main_menu)
     else:
-        await message.answer('Мак Адрес не соответствует стандартам')
-    await state.clear()
+        await message.answer('<b>Мак Адрес не соответствует стандартам</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)

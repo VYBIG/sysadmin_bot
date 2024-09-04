@@ -19,10 +19,9 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
                          reply_markup=main_menu_1, parse_mode=ParseMode.HTML)
 
 
-@router.callback_query(F.data == 'back_menu_1')
+@router.callback_query(F.data.in_({'back_menu_1', 'back_to_main_menu'}))
 async def back_menu_1_func(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-
     await callback.message.edit_text(
         f"Привет 👋, <b>{callback.from_user.full_name}</b>! Я сетевой бот помощник 💡\n\n"
         f"Выбери функцию которую ты хочешь использовать⬇️",

@@ -7,6 +7,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
+from kb import back_to_main_menu
 
 router = Router(name=__name__)
 
@@ -16,7 +17,7 @@ class Ping_state(StatesGroup):
 
 
 def check(host):
-    return subprocess.check_output(f'host {host}',shell=True)
+    return subprocess.check_output(f'host {host}', shell=True)
 
 
 def ping(ip):
@@ -36,7 +37,7 @@ async def ping_main_fc(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer('Напишите Хост до которого нужно проверить доступ по протоколу ICMP:')
 
 
-@router.message(Ping_state.ping_state, ~Command('help', 'start', 'get_id', 'chat_gpt'))
+@router.message(Ping_state.ping_state, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
 async def ping_fc(message: Message, state: FSMContext):
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -47,18 +48,25 @@ async def ping_fc(message: Message, state: FSMContext):
                                                    action=ChatAction.TYPING)
                 time.sleep(4)
                 if ping(message.text):
-                    await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅')
+                    await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
+                                         reply_markup=back_to_main_menu)
                 else:
-                    await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌')
+                    await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
+                                         reply_markup=back_to_main_menu)
             else:
-                await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>', )
+                await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>⁉️\n'
+                                     f'Повторите ввод:',
+                                     reply_markup=back_to_main_menu)
         except AddressValueError:
             await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
             time.sleep(4)
             if ping(message.text):
-                await message.answer(f'{message.text} - <b>Доступен</b> ✅')
+                await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
+                                     reply_markup=back_to_main_menu)
             else:
-                await message.answer(f'{message.text} - <b>Не доступен</b> ❌')
+                await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
+                                     reply_markup=back_to_main_menu)
     except subprocess.CalledProcessError:
-        await message.answer('Не правильная запись хоста')
-    await state.clear()
+        await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=back_to_main_menu)

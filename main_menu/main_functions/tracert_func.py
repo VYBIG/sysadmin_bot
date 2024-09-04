@@ -9,7 +9,7 @@ from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
 
-from kb import exit_menu_1
+from kb import exit_menu_1,back_to_main_menu
 
 router = Router(name=__name__)
 
@@ -34,14 +34,16 @@ async def tracert(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer('Введите Хост для Трассировки:')
 
 
-@router.message(Tracert_state.tracert_state, ~Command('help', 'start', 'get_id', 'chat_gpt'))
+@router.message(Tracert_state.tracert_state, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
 async def tracert_fc(message: Message, state: FSMContext):
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
         check(message.text)
         try:
             if not IPv4Address(message.text).is_global:
-                await message.answer('Хост не входит в диапазон <b>Белых IP</b>')
+                await message.answer('Хост не входит в диапазон <b>Белых IP</b> ⁉️'
+                                     'Повторите ввод:'
+                                     ,reply_markup=back_to_main_menu)
                 await state.clear()
             else:
                 messageID = await message.answer(f'Начинаю Трассировку до {message.text}')
@@ -50,7 +52,8 @@ async def tracert_fc(message: Message, state: FSMContext):
                                                     text=f"<blockquote>"
                                                          f"{trace_route(message.text).decode('utf-8')}"
                                                          f"</blockquote>",
-                                                    message_id=messageID.message_id)
+                                                    message_id=messageID.message_id
+                                                    ,reply_markup=back_to_main_menu)
         except ipaddress.AddressValueError:
             messageID = await message.answer(f'Начинаю Трассировку до {message.text}')
             await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -58,8 +61,10 @@ async def tracert_fc(message: Message, state: FSMContext):
                                                 text=f"<blockquote>"
                                                      f"{trace_route(message.text).decode('utf-8')}"
                                                      f"</blockquote>",
-                                                message_id=messageID.message_id)
+                                                message_id=messageID.message_id,
+                                                reply_markup=back_to_main_menu)
 
     except subprocess.CalledProcessError:
-        await message.answer('Не правильная запись хоста')
-    await state.clear()
+        await message.answer('<b>Не правильная запись хоста</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)

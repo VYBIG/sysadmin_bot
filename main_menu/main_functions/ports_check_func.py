@@ -10,12 +10,13 @@ from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
 
-from kb import udp_tcp_prtl, exit_menu_1
+from kb import udp_tcp_prtl, back_to_main_menu
 
 router = Router(name=__name__)
 
 
 class Ports_check_state(StatesGroup):
+    ports_check_state = State()
     ports_check_state_udp = State()
     ports_check_state_tcp = State()
 
@@ -87,9 +88,9 @@ def tcp_ports(ip, port):
 
 @router.callback_query(F.data == 'ports_check')
 async def ports_check(callback: CallbackQuery, state: FSMContext):
-
     await state.clear()
     await callback.answer(cache_time=1)
+    await state.set_state(Ports_check_state.ports_check_state)
     await callback.message.answer('Это Сканер Портов 🔍,\n'
                                   'выберите по какому '
                                   'протоколу нужно сканировать порты:',
@@ -97,31 +98,29 @@ async def ports_check(callback: CallbackQuery, state: FSMContext):
                                   )
 
 
-@router.callback_query(F.data == 'udp_callback')
+@router.callback_query(Ports_check_state.ports_check_state, F.data == 'udp_callback')
 async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
-    await state.clear()
-    await callback.answer(cache_time=1)
     await state.set_state(Ports_check_state.ports_check_state_udp)
     await callback.message.edit_text('Сканирование будет по <b>UDP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
-                                     'Пример - (185.16.25.150/22) \nлибо диапазон (185.16.25.150/20-22)'
-                                     '\nДиапазон не больше 5 портов')
+                                     'Пример - (185.16.25.150/22) \n'
+                                     'либо диапазон (185.16.25.150/20-22)\n'
+                                     'Диапазон не больше 5 портов')
 
 
-@router.callback_query(F.data == 'tcp_callback')
+@router.callback_query(Ports_check_state.ports_check_state, F.data == 'tcp_callback')
 async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
-    await state.clear()
-    await callback.answer(cache_time=1)
     await state.set_state(Ports_check_state.ports_check_state_tcp)
     await callback.message.edit_text('Сканирование будет по <b>TCP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
-                                     'Пример - (185.16.25.150/22) \nлибо диапазон (185.16.25.150/20-22)'
-                                     '\nДиапазон не больше 5 портов')
+                                     'Пример - (185.16.25.150/22) \n'
+                                     'либо диапазон (185.16.25.150/20-22)\n'
+                                     'Диапазон не больше 5 портов')
 
 
 # Это обработчик для UDP
 @router.message(Ports_check_state.ports_check_state_udp,
-                ~Command('help', 'start', 'get_id', 'chat_gpt'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
 async def ports_check_fc_udp(message: Message, state: FSMContext):
     ports_check_message_udp = ""
     try:
@@ -137,10 +136,11 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                         ports_check_message_udp += f'<blockquote>{udp_ports(ip[0], ports[i])}</blockquote>\n\n'
                     except CalledProcessError:
                         ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
-                                               f"(udp) timed out:</blockquote>\n\n"
+                                                   f"(udp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_udp,
-                                                    message_id=message_id.message_id)
+                                                    message_id=message_id.message_id
+                                                    , reply_markup=back_to_main_menu)
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта <b>UDP</b> {ip[-1]} у {ip[0]}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -149,29 +149,38 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                                                         text=f"<blockquote>"
                                                              f"{udp_ports(ip[0], ip[-1])}"
                                                              f"</blockquote>",
-                                                        message_id=message_id.message_id)
+                                                        message_id=message_id.message_id
+                                                        , reply_markup=back_to_main_menu)
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<blockquote>connect to "
                                                              f"{ip[0]} port {ip[-1]} "
                                                              f"(udp) timed out:</blockquote>",
-                                                        message_id=message_id.message_id)
+                                                        message_id=message_id.message_id
+                                                        , reply_markup=back_to_main_menu)
 
         else:
-            await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>')
+            await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>'
+                                 , reply_markup=back_to_main_menu)
     except AddressValueError:
-        await message.answer('Не верный формат IP')
+        await message.answer('<b>Не верный формат IP</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)
     except (PortsNumberError, PortsCountError, PortsRecordError):
-        await message.answer('Не верная запись портов')
+        await message.answer('<b>Не верная запись портов</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)
     except SplitRecordError:
-        await message.answer('Не верная форма записи')
+        await message.answer('<b>Не верная форма записи</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)
 
     await state.clear()
 
 
 # Это обработчик для TCP
 @router.message(Ports_check_state.ports_check_state_tcp,
-                ~Command('help', 'start', 'get_id', 'chat_gpt'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
 async def ports_check_fc_tcp(message: Message, state: FSMContext):
     ports_check_message_tcp = ""
     try:
@@ -187,10 +196,11 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                         ports_check_message_tcp += f'<blockquote>{tcp_ports(ip[0], ports[i])}</blockquote>\n\n'
                     except CalledProcessError:
                         ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
-                                               f"(tcp) timed out:</blockquote>\n\n"
+                                                   f"(tcp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_tcp,
-                                                    message_id=message_id.message_id)
+                                                    message_id=message_id.message_id
+                                                    , reply_markup=back_to_main_menu)
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта <b>TCP</b> {ip[-1]} у {ip[0]}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -199,21 +209,31 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                                                         text=f"<blockquote>"
                                                              f"{tcp_ports(ip[0], ip[-1])}"
                                                              f"</blockquote>",
-                                                        message_id=message_id.message_id)
+                                                        message_id=message_id.message_id
+                                                        , reply_markup=back_to_main_menu)
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<blockquote>connect to "
                                                              f"{ip[0]} port {ip[-1]} "
                                                              f"(tcp) timed out:</blockquote>",
-                                                        message_id=message_id.message_id)
+                                                        message_id=message_id.message_id
+                                                        , reply_markup=back_to_main_menu)
 
         else:
-            await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>')
+            await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP </b>⁉️\n'
+                                 f'Повторите ввод:'
+                                 , reply_markup=back_to_main_menu)
     except AddressValueError:
-        await message.answer('Не верный формат IP')
+        await message.answer('<b>Не верный формат IP</b> ⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=back_to_main_menu)
     except (PortsNumberError, PortsCountError, PortsRecordError):
-        await message.answer('Не верная запись портов')
+        await message.answer('<b>Не верная запись портов</b> ⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=back_to_main_menu)
     except SplitRecordError:
-        await message.answer('Не верная форма записи')
+        await message.answer('<b>Не верная форма записи </b>⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=back_to_main_menu)
 
     await state.clear()

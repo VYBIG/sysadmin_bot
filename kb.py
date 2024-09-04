@@ -44,3 +44,7 @@ udp_tcp_prtl = [[InlineKeyboardButton(text="↖️ UDP", callback_data='udp_call
                 [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='back_menu_1')]]
 
 udp_tcp_prtl = InlineKeyboardMarkup(inline_keyboard=udp_tcp_prtl)
+
+back_to_main_menu = [[InlineKeyboardButton(text="↩️️️ Вернуться в Основное меню", callback_data='back_to_main_menu')]]
+
+back_to_main_menu = InlineKeyboardMarkup(inline_keyboard=back_to_main_menu)
