@@ -133,14 +133,15 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0], ports[i])}</blockquote>\n\n'
+                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0],str(i))}</blockquote>\n\n'
                     except CalledProcessError:
-                        ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                        ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {str(i)} " \
                                                    f"(udp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_udp,
                                                     message_id=message_id.message_id
                                                     , reply_markup=back_to_main_menu)
+                await state.clear()
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта <b>UDP</b> {ip[-1]} у {ip[0]}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -151,6 +152,7 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                                                              f"</blockquote>",
                                                         message_id=message_id.message_id
                                                         , reply_markup=back_to_main_menu)
+                    await state.clear()
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<blockquote>connect to "
@@ -158,6 +160,7 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                                                              f"(udp) timed out:</blockquote>",
                                                         message_id=message_id.message_id
                                                         , reply_markup=back_to_main_menu)
+                    await state.clear()
 
         else:
             await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>'
@@ -175,7 +178,7 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                              'Повторите ввод:',
                              reply_markup=back_to_main_menu)
 
-    await state.clear()
+
 
 
 # Это обработчик для TCP
@@ -193,14 +196,15 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message_tcp += f'<blockquote>{tcp_ports(ip[0], ports[i])}</blockquote>\n\n'
+                        ports_check_message_tcp += f'<blockquote>{tcp_ports(ip[0], str(i))}</blockquote>\n\n'
                     except CalledProcessError:
-                        ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                        ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {str(i)} " \
                                                    f"(tcp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_tcp,
                                                     message_id=message_id.message_id
                                                     , reply_markup=back_to_main_menu)
+                await state.clear()
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта <b>TCP</b> {ip[-1]} у {ip[0]}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -211,6 +215,7 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                                                              f"</blockquote>",
                                                         message_id=message_id.message_id
                                                         , reply_markup=back_to_main_menu)
+                    await state.clear()
                 except CalledProcessError:
                     await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                         text=f"<blockquote>connect to "
@@ -218,6 +223,7 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                                                              f"(tcp) timed out:</blockquote>",
                                                         message_id=message_id.message_id
                                                         , reply_markup=back_to_main_menu)
+                    await state.clear()
 
         else:
             await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP </b>⁉️\n'
@@ -236,4 +242,3 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                              'Повторите ввод:'
                              , reply_markup=back_to_main_menu)
 
-    await state.clear()
