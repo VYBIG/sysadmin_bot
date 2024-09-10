@@ -54,12 +54,12 @@ async def ip_calc_back(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(Ip_calc_state.user_ip_address, F.data == 'mask_faq')
-async def ip_calc(callback: CallbackQuery):
+async def ip_calc_mask(callback: CallbackQuery):
     await callback.message.edit_text(text=mask, reply_markup=back_to_ip_calc)
 
 
 @router.callback_query(F.data == 'mask_faq')
-async def ip_calc(callback: CallbackQuery):
+async def ip_calc_mask(callback: CallbackQuery):
     await callback.message.edit_text(text=mask)
 
 

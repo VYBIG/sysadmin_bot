@@ -48,3 +48,13 @@ udp_tcp_prtl = InlineKeyboardMarkup(inline_keyboard=udp_tcp_prtl)
 back_to_main_menu = [[InlineKeyboardButton(text="↩️️️ Вернуться в Основное меню", callback_data='back_to_main_menu')]]
 
 back_to_main_menu = InlineKeyboardMarkup(inline_keyboard=back_to_main_menu)
+
+
+pnc_kb = [[InlineKeyboardButton(text="☎️ Открыть Памятку кодов городов", callback_data='pnc_faq')],
+              [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='next_menu_2')]]
+back_to_pnc = [[InlineKeyboardButton(text="⬅️ Вернуться в поиск номера", callback_data='pnc_back')]]
+
+pnc_kb = InlineKeyboardMarkup(inline_keyboard=pnc_kb)
+back_to_pnc = InlineKeyboardMarkup(inline_keyboard=back_to_pnc)
+
+

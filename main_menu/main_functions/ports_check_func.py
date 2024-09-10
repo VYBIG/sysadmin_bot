@@ -133,7 +133,7 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                 ports = ip[-1].split('-')
                 for i in range(int(ports[0]), int(ports[-1]) + 1):
                     try:
-                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0],str(i))}</blockquote>\n\n'
+                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0], str(i))}</blockquote>\n\n'
                     except CalledProcessError:
                         ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {str(i)} " \
                                                    f"(udp) timed out:</blockquote>\n\n"
@@ -177,8 +177,6 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
         await message.answer('<b>Не верная форма записи</b> ⁉️\n'
                              'Повторите ввод:',
                              reply_markup=back_to_main_menu)
-
-
 
 
 # Это обработчик для TCP
@@ -241,4 +239,3 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
         await message.answer('<b>Не верная форма записи </b>⁉️\n'
                              'Повторите ввод:'
                              , reply_markup=back_to_main_menu)
-
