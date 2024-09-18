@@ -116,7 +116,7 @@ async def mac_converter_up_func(callback: CallbackQuery, state: FSMContext):
         mac_form_up = "XX-XX-XX-XX-XX-XX"
     elif callback.data == 'colon_2_callback':
         F.data = 'colon_2_callback'
-        mac_form_up = "XXXX:XXXX:XX:XX"
+        mac_form_up = "XXXX:XXXX:XXXX"
     elif callback.data == 'point_2_callback':
         F.data = 'point_2_callback'
         mac_form_up = "XXXX.XXXX.XXXX"
