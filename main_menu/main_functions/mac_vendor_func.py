@@ -1,4 +1,3 @@
-# https://www.macvendorlookup.com/api/v2/{MAC_Address}
 from aiogram import Router, F, types
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message

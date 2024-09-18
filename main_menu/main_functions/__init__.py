@@ -14,6 +14,7 @@ from .ports_check_func import router as ports_check_router
 from .qr_code_maker_func import router as qr_code_maker_router
 from .tracert_func import router as tracert_router
 from .useful_command_func import router as useful_command_router
+from .mac_converter_func import router as mac_converter_router
 
 router = Router()
 
@@ -28,4 +29,6 @@ router.include_routers(bit_to_byte_router,
                        ports_check_router,
                        qr_code_maker_router,
                        tracert_router,
-                       useful_command_router)
+                       useful_command_router,
+                       mac_converter_router,
+                       )

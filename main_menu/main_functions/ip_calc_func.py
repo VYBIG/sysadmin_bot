@@ -36,10 +36,9 @@ async def ip_calc(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ip_calc_state.user_ip_address)
-    if F.data == 'ip_calc_back':
-        await callback.message.answer('Это IP Калькулятор 🧮\n\n\n'
-                                      'Введите IP в формате IP/маска 🔢/🎭)\n',
-                                      reply_markup=ip_calc_kb)
+    await callback.message.answer('Это IP Калькулятор 🧮\n\n\n'
+                                  'Введите IP в формате IP/маска 🔢/🎭)\n',
+                                  reply_markup=ip_calc_kb)
 
 
 @router.callback_query(F.data == 'ip_calc_back')

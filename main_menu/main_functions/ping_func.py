@@ -16,17 +16,15 @@ class Ping_state(StatesGroup):
     ping_state = State()
 
 
-def check(host):
-    return subprocess.check_output(f'host {host}', shell=True)
-
-
 def ping(ip):
     process = subprocess.Popen(f"ping -c 1 {ip}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.wait()
     if process.returncode == 0:
         return True
-    else:
+    elif process.returncode == 1:
         return False
+    else:
+        raise subprocess.CalledProcessError
 
 
 @router.callback_query(F.data == 'ping')
@@ -41,24 +39,9 @@ async def ping_main_fc(callback: CallbackQuery, state: FSMContext):
 async def ping_fc(message: Message, state: FSMContext):
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-        check(message.text)
-        try:
-            if IPv4Address(message.text).is_global:
-                await message.bot.send_chat_action(chat_id=message.chat.id,
-                                                   action=ChatAction.TYPING)
-                time.sleep(4)
-                if ping(message.text):
-                    await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
-                                         reply_markup=back_to_main_menu)
-                else:
-                    await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
-                                         reply_markup=back_to_main_menu)
-            else:
-                await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>⁉️\n'
-                                     f'Повторите ввод:',
-                                     reply_markup=back_to_main_menu)
-        except AddressValueError:
-            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+        if IPv4Address(message.text).is_global:
+            await message.bot.send_chat_action(chat_id=message.chat.id,
+                                               action=ChatAction.TYPING)
             time.sleep(4)
             if ping(message.text):
                 await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
@@ -66,6 +49,19 @@ async def ping_fc(message: Message, state: FSMContext):
             else:
                 await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
                                      reply_markup=back_to_main_menu)
+        else:
+            await message.answer(f'IP-Адрес не входит в диапазон <b>Белых IP</b>⁉️\n'
+                                 f'Повторите ввод:',
+                                 reply_markup=back_to_main_menu)
+    except AddressValueError:
+        await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+        time.sleep(4)
+        if ping(message.text):
+            await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
+                                 reply_markup=back_to_main_menu)
+        else:
+            await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
+                                 reply_markup=back_to_main_menu)
     except subprocess.CalledProcessError:
         await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
                              'Повторите ввод:'

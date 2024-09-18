@@ -4,6 +4,7 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 import requests
+from aiogram.enums import ChatAction
 from ipaddress import IPv4Address, AddressValueError
 import subprocess
 import json
@@ -35,6 +36,7 @@ async def ip_info_main(callback: CallbackQuery, state: FSMContext):
 async def ip_info_fc(message: Message, state: FSMContext):
     try:
         ip = IPv4Address(message.text)
+        await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
         ip_info_json = json.loads(cURL(f'https://ipcheck.me/ru/{ip}'))
         await message.answer(f'<b>IP адрес</b> : <code>{ip_info_json["ip"]}</code>\n\n'
                              f'<b>Компания</b> : <code>{ip_info_json["network"]["asn_organization"]}</code>\n\n'
