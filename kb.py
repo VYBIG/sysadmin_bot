@@ -63,7 +63,7 @@ mac_convert_upper = \
      [InlineKeyboardButton(text="XX:XX:XX:XX:XX:XX", callback_data='colon_1_callback'),
       InlineKeyboardButton(text="XX.XX.XX.XX.XX.XX", callback_data='point_1_callback')],
      [InlineKeyboardButton(text="XX-XX-XX-XX-XX-XX", callback_data='hyphen_1_callback'),
-      InlineKeyboardButton(text="XXXX:XXXX:XX:XX", callback_data='colon_2_callback')],
+      InlineKeyboardButton(text="XXXX:XXXX:XXXX", callback_data='colon_2_callback')],
      [InlineKeyboardButton(text="XXXX.XXXX.XXXX", callback_data='point_2_callback'),
       InlineKeyboardButton(text="XXXX-XXXX-XXXX", callback_data='hyphen_2_callback')],
      [InlineKeyboardButton(text="XXXXXXXXXXXX", callback_data='solid_callback'),
