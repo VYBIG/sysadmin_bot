@@ -41,7 +41,7 @@ async def ip_calc(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=ip_calc_kb)
 
 
-@router.callback_query(F.data == 'ip_calc_back')
+@router.callback_query(Ip_calc_state.user_ip_address, F.data == 'ip_calc_back')
 async def ip_calc_back(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
