@@ -32,7 +32,26 @@ def ip_address_type(ip):
         return 'Unknown'
 
 
-@router.callback_query(F.data.in_({'ip_calc','ip_calc_back'}))
+@router.callback_query(Ip_calc_state.user_ip_address, F.data == 'ip_calc_back')
+async def ip_calc(callback: CallbackQuery, state: FSMContext):
+    main_log(callback=callback)
+    await callback.message.edit_text('Это IP Калькулятор 🧮\n\n\n'
+                                     'Введите IP в формате IP/маска 🔢/🎭)\n',
+                                     reply_markup=ip_calc_kb)
+
+
+@router.callback_query(F.data == 'ip_calc_back')
+async def ip_calc(callback: CallbackQuery, state: FSMContext):
+    main_log(callback=callback)
+    await state.clear()
+    await callback.answer(cache_time=1)
+    await state.set_state(Ip_calc_state.user_ip_address)
+    await callback.message.answer('Это IP Калькулятор 🧮\n\n\n'
+                                  'Введите IP в формате IP/маска 🔢/🎭)\n',
+                                  reply_markup=ip_calc_kb)
+
+
+@router.callback_query(F.data == 'ip_calc')
 async def ip_calc(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
@@ -43,19 +62,8 @@ async def ip_calc(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=ip_calc_kb)
 
 
-@router.callback_query(Ip_calc_state.user_ip_address, F.data == 'ip_calc_back')
-async def ip_calc_back(callback: CallbackQuery, state: FSMContext):
-    await state.clear()
-    await callback.answer(cache_time=1)
-    await state.set_state(Ip_calc_state.user_ip_address)
-    main_log(callback=callback)
-    await callback.message.edit_text('Это IP Калькулятор 🧮\n\n\n'
-                                     'Введите IP в формате IP/маска 🔢/🎭)\n',
-                                     reply_markup=ip_calc_kb)
-
-
 @router.callback_query(Ip_calc_state.user_ip_address, F.data == 'mask_faq')
-async def ip_calc_mask(callback: CallbackQuery):
+async def ip_calc_mask(callback: CallbackQuery, state: FSMContext):
     main_log(callback=callback)
     await callback.message.edit_text(text=mask, reply_markup=back_to_ip_calc)
 
@@ -67,7 +75,7 @@ async def ip_calc_mask(callback: CallbackQuery):
 
 
 @router.message(Ip_calc_state.user_ip_address,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel','get_log'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def ip_calc_state(message: Message, state: FSMContext):
     main_log(message=message)
     if '/' in message.text:
