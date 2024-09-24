@@ -1,48 +1,10 @@
-2024-09-24 23:14:52,072 INFO Start polling
-2024-09-24 23:14:52,341 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
-2024-09-24 23:14:52,779 INFO time=Tue Sep 24 23:14:52 2024, user_id=643541689, user_full_name=Василий, user_message=/start, username = VY_BIG
-2024-09-24 23:14:52,999 INFO Update id=681031486 is handled. Duration 563 ms by bot id=7261051868
-2024-09-24 23:14:54,046 INFO time=Tue Sep 24 23:14:54 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_calc, username = VY_BIG
-2024-09-24 23:14:54,134 INFO Update id=681031487 is handled. Duration 171 ms by bot id=7261051868
-2024-09-24 23:14:56,058 INFO time=Tue Sep 24 23:14:56 2024, user_id=643541689, user_full_name=Василий, user_pressed=back_menu_1, username = VY_BIG
-2024-09-24 23:14:56,172 INFO Update id=681031488 is handled. Duration 125 ms by bot id=7261051868
-2024-09-24 23:14:57,890 INFO time=Tue Sep 24 23:14:57 2024, user_id=643541689, user_full_name=Василий, user_pressed=next_menu_2, username = VY_BIG
-2024-09-24 23:14:58,118 INFO Update id=681031489 is handled. Duration 234 ms by bot id=7261051868
-2024-09-24 23:14:59,539 INFO time=Tue Sep 24 23:14:59 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_calc, username = VY_BIG
-2024-09-24 23:14:59,629 INFO Update id=681031490 is handled. Duration 172 ms by bot id=7261051868
-2024-09-24 23:15:01,228 INFO time=Tue Sep 24 23:15:01 2024, user_id=643541689, user_full_name=Василий, user_pressed=mask_faq, username = VY_BIG
-2024-09-24 23:15:01,329 INFO Update id=681031491 is handled. Duration 94 ms by bot id=7261051868
-2024-09-24 23:15:02,813 INFO time=Tue Sep 24 23:15:02 2024, user_id=643541689, user_full_name=Василий, user_message=/start, username = VY_BIG
-2024-09-24 23:15:02,953 INFO Update id=681031492 is handled. Duration 250 ms by bot id=7261051868
-2024-09-24 23:15:04,024 INFO time=Tue Sep 24 23:15:04 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_calc_back, username = VY_BIG
-2024-09-24 23:15:04,142 INFO Update id=681031493 is handled. Duration 219 ms by bot id=7261051868
-2024-09-24 23:15:10,696 INFO time=Tue Sep 24 23:15:10 2024, user_id=643541689, user_full_name=Василий, user_pressed=mac_converter, username = VY_BIG
-2024-09-24 23:15:10,834 INFO Update id=681031494 is handled. Duration 219 ms by bot id=7261051868
-2024-09-24 23:15:12,306 INFO time=Tue Sep 24 23:15:12 2024, user_id=643541689, user_full_name=Василий, user_pressed=lower_callback, username = VY_BIG
-2024-09-24 23:15:12,417 INFO Update id=681031495 is handled. Duration 125 ms by bot id=7261051868
-2024-09-24 23:15:13,039 INFO time=Tue Sep 24 23:15:13 2024, user_id=643541689, user_full_name=Василий, user_pressed=colon_2_callback, username = VY_BIG
-2024-09-24 23:15:13,125 INFO Update id=681031496 is handled. Duration 94 ms by bot id=7261051868
-2024-09-24 23:15:18,713 INFO time=Tue Sep 24 23:15:18 2024, user_id=643541689, user_full_name=Василий, user_message=ff:ff:ff:ff:ff:ff, username = VY_BIG
-2024-09-24 23:15:18,822 INFO Update id=681031497 is handled. Duration 108 ms by bot id=7261051868
-2024-09-24 23:15:22,633 INFO time=Tue Sep 24 23:15:22 2024, user_id=643541689, user_full_name=Василий, user_pressed=back_to_lower, username = VY_BIG
-2024-09-24 23:15:22,730 INFO Update id=681031498 is handled. Duration 108 ms by bot id=7261051868
-2024-09-24 23:15:24,043 INFO time=Tue Sep 24 23:15:24 2024, user_id=643541689, user_full_name=Василий, user_pressed=upper_callback, username = VY_BIG
-2024-09-24 23:15:24,142 INFO Update id=681031499 is handled. Duration 109 ms by bot id=7261051868
-2024-09-24 23:15:26,456 INFO time=Tue Sep 24 23:15:26 2024, user_id=643541689, user_full_name=Василий, user_pressed=colon_1_callback, username = VY_BIG
-2024-09-24 23:15:26,599 INFO Update id=681031500 is handled. Duration 141 ms by bot id=7261051868
-2024-09-24 23:15:27,776 INFO time=Tue Sep 24 23:15:27 2024, user_id=643541689, user_full_name=Василий, user_message=ffff:ffff:ffff, username = VY_BIG
-2024-09-24 23:15:27,904 INFO Update id=681031501 is handled. Duration 140 ms by bot id=7261051868
-2024-09-24 23:15:30,746 INFO time=Tue Sep 24 23:15:30 2024, user_id=643541689, user_full_name=Василий, user_message=/start, username = VY_BIG
-2024-09-24 23:15:30,845 INFO Update id=681031502 is handled. Duration 219 ms by bot id=7261051868
-2024-09-24 23:15:31,766 INFO time=Tue Sep 24 23:15:31 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_calc, username = VY_BIG
-2024-09-24 23:15:31,875 INFO Update id=681031503 is handled. Duration 188 ms by bot id=7261051868
-2024-09-24 23:15:32,737 INFO time=Tue Sep 24 23:15:32 2024, user_id=643541689, user_full_name=Василий, user_pressed=mask_faq, username = VY_BIG
-2024-09-24 23:15:32,879 INFO Update id=681031504 is handled. Duration 141 ms by bot id=7261051868
-2024-09-24 23:15:33,845 INFO time=Tue Sep 24 23:15:33 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_calc_back, username = VY_BIG
-2024-09-24 23:15:34,023 INFO Update id=681031505 is handled. Duration 344 ms by bot id=7261051868
-2024-09-24 23:15:39,394 INFO time=Tue Sep 24 23:15:39 2024, user_id=643541689, user_full_name=Василий, user_message=192.168.0.1/24, username = VY_BIG
-2024-09-24 23:15:39,530 INFO Update id=681031506 is handled. Duration 140 ms by bot id=7261051868
-2024-09-24 23:15:45,710 INFO time=Tue Sep 24 23:15:45 2024, user_id=643541689, user_full_name=Василий, user_message=/get_log, username = VY_BIG
-2024-09-24 23:15:45,876 INFO Update id=681031507 is handled. Duration 172 ms by bot id=7261051868
-2024-09-24 23:18:29,957 INFO Polling stopped
-2024-09-24 23:18:30,224 INFO Polling stopped for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
+2024-09-24 23:31:48,611 INFO Start polling
+2024-09-24 23:31:48,776 INFO Run polling for bot @SysodminHelper_bot id=7284809013 - 'РўРІРѕР№ СЃРµС‚РµРІРѕР№ РїРѕРјРѕС‰РЅРёРє'
+2024-09-24 23:31:49,266 INFO time=Tue Sep 24 23:31:49 2024, user_id=643541689, user_full_name=Р’Р°СЃРёР»РёР№, user_message=/start, username = VY_BIG
+2024-09-24 23:31:49,386 INFO Update id=476833140 is handled. Duration 532 ms by bot id=7284809013
+2024-09-24 23:31:50,657 INFO time=Tue Sep 24 23:31:50 2024, user_id=643541689, user_full_name=Р’Р°СЃРёР»РёР№, user_pressed=ip_calc, username = VY_BIG
+2024-09-24 23:31:50,733 INFO Update id=476833141 is handled. Duration 135 ms by bot id=7284809013
+2024-09-24 23:31:52,552 INFO time=Tue Sep 24 23:31:52 2024, user_id=643541689, user_full_name=Р’Р°СЃРёР»РёР№, user_message=/start, username = VY_BIG
+2024-09-24 23:31:52,627 INFO Update id=476833142 is handled. Duration 135 ms by bot id=7284809013
+2024-09-24 23:31:53,836 INFO time=Tue Sep 24 23:31:53 2024, user_id=643541689, user_full_name=Р’Р°СЃРёР»РёР№, user_message=/get_log, username = VY_BIG
+2024-09-24 23:31:54,232 INFO Update id=476833143 is handled. Duration 398 ms by bot id=7284809013

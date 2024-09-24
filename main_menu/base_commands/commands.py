@@ -69,7 +69,7 @@ async def command_get_log(message: Message, state: FSMContext) -> None:
     await state.clear()
     main_log(message=message)
     await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-    log = open('C:\\Users\\Василий Михайлович\\PycharmProjects\\pythonnetbot\\sysadmins.txt', 'rb').read()
+    log = open('/root/.virtualenvs/sysadmin_bot/sysadmin_bot/sysadmins.txt', 'rb').read()
     document = BufferedInputFile(log, filename="log.txt")
     if message.chat.id == 643541689:
         await message.bot.send_document(message.chat.id, document=document)
