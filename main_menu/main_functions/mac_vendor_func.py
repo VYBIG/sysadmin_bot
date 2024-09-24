@@ -7,6 +7,7 @@ import requests
 import re
 import json
 from kb import exit_menu_1, back_to_main_menu
+from common_functions import main_log
 
 session = requests.Session()
 router = Router(name=__name__)
@@ -32,11 +33,14 @@ async def mac_vendor(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Mac_vendor_state.user_mac)
+    main_log(callback=callback)
     await callback.message.answer('Напишите MAC-Адрес, который вы хотите опознать:')
 
 
-@router.message(Mac_vendor_state.user_mac, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+@router.message(Mac_vendor_state.user_mac,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def mac_vendor_state(message: Message, state: FSMContext):
+    main_log(message=message)
     mac = format_mac_address(str(message.text))
     if is_valid_mac(mac):
         try:

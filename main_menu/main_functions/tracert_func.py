@@ -8,7 +8,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
-
+from common_functions import main_log
 from kb import exit_menu_1,back_to_main_menu
 
 router = Router(name=__name__)
@@ -31,11 +31,14 @@ async def tracert(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Tracert_state.tracert_state)
+    main_log(callback=callback)
     await callback.message.answer('Введите Хост для Трассировки:')
 
 
-@router.message(Tracert_state.tracert_state, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+@router.message(Tracert_state.tracert_state,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def tracert_fc(message: Message, state: FSMContext):
+    main_log(message=message)
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
         check(message.text)

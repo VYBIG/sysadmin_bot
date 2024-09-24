@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
-
+from common_functions import main_log
 from kb import udp_tcp_prtl, back_to_main_menu
 
 router = Router(name=__name__)
@@ -91,6 +91,7 @@ async def ports_check(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ports_check_state.ports_check_state)
+    main_log(callback=callback)
     await callback.message.answer('Это Сканер Портов 🔍,\n'
                                   'выберите по какому '
                                   'протоколу нужно сканировать порты:',
@@ -101,6 +102,7 @@ async def ports_check(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(Ports_check_state.ports_check_state, F.data == 'udp_callback')
 async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Ports_check_state.ports_check_state_udp)
+    main_log(callback=callback)
     await callback.message.edit_text('Сканирование будет по <b>UDP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
                                      'Пример - (185.16.25.150/22) \n'
@@ -111,6 +113,7 @@ async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(Ports_check_state.ports_check_state, F.data == 'tcp_callback')
 async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Ports_check_state.ports_check_state_tcp)
+    main_log(callback=callback)
     await callback.message.edit_text('Сканирование будет по <b>TCP</b> 🔍\n'
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
                                      'Пример - (185.16.25.150/22) \n'
@@ -120,8 +123,9 @@ async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
 
 # Это обработчик для UDP
 @router.message(Ports_check_state.ports_check_state_udp,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def ports_check_fc_udp(message: Message, state: FSMContext):
+    main_log(message=message)
     ports_check_message_udp = ""
     try:
         check_ports_handler(message.text)
@@ -181,8 +185,9 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
 
 # Это обработчик для TCP
 @router.message(Ports_check_state.ports_check_state_tcp,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def ports_check_fc_tcp(message: Message, state: FSMContext):
+    main_log(message=message)
     ports_check_message_tcp = ""
     try:
         check_ports_handler(message.text)

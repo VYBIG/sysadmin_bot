@@ -9,6 +9,7 @@ import time
 import re
 import json
 from kb import mac_convert_upper, mac_convert_lower, exit_convert_upper, exit_convert_lower
+from common_functions import main_log
 
 session = requests.Session()
 router = Router(name=__name__)
@@ -66,6 +67,7 @@ async def mac_converter_default(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Mac_conv_state.mac_conv_upper)
+    main_log(callback=callback)
     await callback.message.answer('Выберете формат в который вы хотите \n'
                                   'конвертировать MAC-Адреса \n'
                                   'Так же выберите формат конвертации\n'
@@ -78,6 +80,7 @@ async def mac_converter_default(callback: CallbackQuery, state: FSMContext):
                                    'lower_callback'}))
 async def mac_converter_low(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Mac_conv_state.mac_conv_lower)
+    main_log(callback=callback)
     await callback.message.edit_text('Выберете формат в который вы хотите \n'
                                      'конвертировать MAC-Адреса \n'
                                      'Так же выберите формат конвертации\n'
@@ -89,6 +92,7 @@ async def mac_converter_low(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.in_({'back_to_upper', 'upper_callback'}))
 async def mac_converter_up(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Mac_conv_state.mac_conv_upper)
+    main_log(callback=callback)
     await callback.message.edit_text('Выберете формат в который вы хотите \n'
                                      'конвертировать MAC-Адреса \n'
                                      'Так же выберите формат конвертации\n'
@@ -105,6 +109,7 @@ async def mac_converter_up(callback: CallbackQuery, state: FSMContext):
                                                                   'hyphen_2_callback',
                                                                   'solid_callback'}))
 async def mac_converter_up_func(callback: CallbackQuery, state: FSMContext):
+    main_log(callback=callback)
     if callback.data == 'colon_1_callback':
         F.data = 'colon_1_callback'
         mac_form_up = "XX:XX:XX:XX:XX:XX"
@@ -137,8 +142,9 @@ async def mac_converter_up_func(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(Mac_conv_state.mac_conv_up,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def mac_converter_func_up(message: Message, state: FSMContext):
+    main_log(message=message)
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'
                          f'<pre>{mac_converter(message.text, F.data, True)}</pre>',
                          reply_markup=exit_convert_upper)
@@ -154,6 +160,7 @@ async def mac_converter_func_up(message: Message, state: FSMContext):
                                                                   'hyphen_2_callback',
                                                                   'solid_callback'}))
 async def mac_converter_low_func(callback: CallbackQuery, state: FSMContext):
+    main_log(callback=callback)
     if callback.data == 'colon_1_callback':
         F.data = 'colon_1_callback'
         mac_form_low = 'xx:xx:xx:xx:xx:xx'
@@ -186,8 +193,9 @@ async def mac_converter_low_func(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(Mac_conv_state.mac_conv_low,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def mac_converter_func_low(message: Message, state: FSMContext):
+    main_log(message=message)
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'
                          f'<pre>{mac_converter(message.text, F.data, False)}</pre>',
                          reply_markup=exit_convert_lower)

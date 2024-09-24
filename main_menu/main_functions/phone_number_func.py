@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from kb import exit_menu_2, pnc_kb, back_to_pnc
 from .numbers_codes import codes
-
+from common_functions import main_log
 import requests
 from bs4 import BeautifulSoup
 
@@ -27,6 +27,7 @@ async def phone_number(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(pncs)
+    main_log(callback=callback)
     await callback.message.answer('Напишите номер телефона который хотите опознать\n\n'
                                   '<b>Формат - 7xxxxxxxxxx, 8xxxxxxxxxx</b> 📞',
                                   reply_markup=pnc_kb)
@@ -37,13 +38,16 @@ async def phone_number(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(pncs)
+    main_log(callback=callback)
     await callback.message.edit_text('Напишите номер телефона который хотите опознать\n\n'
                                      '<b>Формат - 7xxxxxxxxxx, 8xxxxxxxxxx</b> 📞',
                                      reply_markup=pnc_kb)
 
 
-@router.message(pncs, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+@router.message(pncs,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def phone_number_check(message: Message):
+    main_log(message=message)
     try:
         phone = ''.join(filter(str.isdigit, message.text))
         phone = '7'+ phone[1:]
@@ -67,9 +71,11 @@ async def phone_number_check(message: Message):
 
 @router.callback_query(pncs, F.data == 'pnc_faq')
 async def ip_calc_mask(callback: CallbackQuery):
+    main_log(callback=callback)
     await callback.message.edit_text(text=codes, reply_markup=back_to_pnc)
 
 
 @router.callback_query(F.data == 'pnc_faq')
 async def ip_calc_mask(callback: CallbackQuery):
+    main_log(callback=callback)
     await callback.message.edit_text(text=codes)

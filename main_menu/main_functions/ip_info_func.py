@@ -9,7 +9,7 @@ from ipaddress import IPv4Address, AddressValueError
 import subprocess
 import json
 from kb import back_to_main_menu
-
+from common_functions import main_log
 
 def cURL(url):
     return subprocess.check_output(['curl', url])
@@ -29,11 +29,14 @@ async def ip_info_main(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ip_info_state.ip_info_st)
+    main_log(callback=callback)
     await callback.message.answer('Напишите IP информацию о котором вы хотите узнать:')
 
 
-@router.message(Ip_info_state.ip_info_st, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+@router.message(Ip_info_state.ip_info_st,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel','get_log'))
 async def ip_info_fc(message: Message, state: FSMContext):
+    main_log(message=message)
     try:
         ip = IPv4Address(message.text)
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)

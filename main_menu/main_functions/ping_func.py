@@ -8,7 +8,7 @@ from aiogram.fsm.state import StatesGroup, State
 from ipaddress import IPv4Address, AddressValueError
 import time
 from kb import back_to_main_menu
-
+from common_functions import main_log
 router = Router(name=__name__)
 
 
@@ -32,11 +32,14 @@ async def ping_main_fc(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(Ping_state.ping_state)
+    main_log(callback=callback)
     await callback.message.answer('Напишите Хост до которого нужно проверить доступ по протоколу ICMP:')
 
 
-@router.message(Ping_state.ping_state, ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel'))
+@router.message(Ping_state.ping_state,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def ping_fc(message: Message, state: FSMContext):
+    main_log(message=message)
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
         if IPv4Address(message.text).is_global:
