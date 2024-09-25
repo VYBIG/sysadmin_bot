@@ -14,8 +14,15 @@ from kb import exit_menu_1,back_to_main_menu
 router = Router(name=__name__)
 
 
-def check(host):
-    return subprocess.check_output(f'host {host}',shell=True)
+def ping(ip):
+    process = subprocess.Popen(f"ping -c 1 {ip}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process.wait()
+    if process.returncode == 0:
+        return True
+    elif process.returncode == 1:
+        return False
+    else:
+        raise subprocess.CalledProcessError(returncode=2,cmd=f"ping -c 1 {ip}")
 
 
 class Tracert_state(StatesGroup):
@@ -41,7 +48,7 @@ async def tracert_fc(message: Message, state: FSMContext):
     main_log(message=message)
     try:
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-        check(message.text)
+        ping(message.text)
         try:
             if not IPv4Address(message.text).is_global:
                 await message.answer('Хост не входит в диапазон <b>Белых IP</b> ⁉️'
