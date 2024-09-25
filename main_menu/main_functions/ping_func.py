@@ -23,6 +23,8 @@ def ping(ip):
         return True
     elif process.returncode == 1:
         return False
+    else:
+        raise subprocess.CalledProcessError(returncode=2,cmd=f"ping -c 1 {ip}")
 
 
 @router.callback_query(F.data == 'ping')
@@ -64,7 +66,7 @@ async def ping_fc(message: Message, state: FSMContext):
             else:
                 await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
                                          reply_markup=back_to_main_menu)
-        except:
+        except subprocess.CalledProcessError:
             await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
                                  'Повторите ввод:'
                                  , reply_markup=back_to_main_menu)
