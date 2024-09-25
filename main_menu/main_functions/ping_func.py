@@ -23,8 +23,6 @@ def ping(ip):
         return True
     elif process.returncode == 1:
         return False
-    else:
-        raise subprocess.CalledProcessError
 
 
 @router.callback_query(F.data == 'ping')
