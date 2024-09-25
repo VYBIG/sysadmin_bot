@@ -57,20 +57,19 @@ async def ping_fc(message: Message, state: FSMContext):
                                  f'Повторите ввод:',
                                  reply_markup=back_to_main_menu)
     except AddressValueError:
-        try:
-            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-            time.sleep(4)
-            if ping(message.text):
-                await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
-                                     reply_markup=back_to_main_menu)
-            else:
-                await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
+        await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+        time.sleep(4)
+        if ping(message.text):
+            await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅', 
                                  reply_markup=back_to_main_menu)
-        except subprocess.CalledProcessError:
-            await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
-                                 'Повторите ввод:'
-                                 , reply_markup=back_to_main_menu)
+        else:
+            await message.answer(f'{message.text} - <b>Не доступен по ICMP</b> ❌',
+                                     reply_markup=back_to_main_menu)
     except subprocess.CalledProcessError:
+        await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=back_to_main_menu)
+    except:
         await message.answer('<b>Не правильная запись хоста </b>⁉️\n'
                              'Повторите ввод:'
                              , reply_markup=back_to_main_menu)
