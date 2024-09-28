@@ -1,11 +1,10 @@
 from aiogram import Router
 from aiogram.enums import ChatAction
-from aiogram.types import FSInputFile
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 from kb import back_to_main_menu
-from aiogram.types.input_file import FSInputFile
 from aiogram.types import BufferedInputFile
 from common_functions import main_log
 
@@ -76,3 +75,61 @@ async def command_get_log(message: Message, state: FSMContext) -> None:
     else:
         await message.answer('Такая команда вам не доступна ⛔️')
 
+
+class Send_message_to_all(StatesGroup):
+    the_message = State()
+    user_list = State()
+
+
+list_of_users = []
+message_to_users = []
+
+
+@router.message(Command('send_mes'))
+async def command_send_message(message: Message, state: FSMContext) -> None:
+    await state.clear()
+    await state.set_state(Send_message_to_all.the_message)
+    if message.chat.id == 643541689:
+        await message.answer('Напишите сообщение \n'
+                             'которое нужно отправить всем пользователям:')
+    else:
+        await message.answer('Такая команда вам не доступна ⛔️')
+
+
+@router.message(Send_message_to_all.the_message,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
+async def command_send_message_next(message: Message, state: FSMContext) -> None:
+    message_to_users.append(message.text)
+    message_to_users.append(message.entities)
+    await state.set_state(Send_message_to_all.user_list)
+    await message.answer('Напишите список пользователей \n'
+                         'которым нужно отправить это сообщение\n'
+                         'Телеграм ID в столбик:')
+
+
+@router.message(Send_message_to_all.user_list,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
+async def command_send_message_next_to(message: Message, state: FSMContext) -> None:
+    await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+    list_of_users.append(message.text.split('\n'))
+    bad_users = []
+    for user in list_of_users[0]:
+        try:
+            await message.bot.send_message(chat_id=int(user), text=message_to_users[0],
+                                           entities=message_to_users[1], parse_mode=None
+                                           )
+        except:
+            print(user)
+            bad_users.append(f'{user}\n')
+    if bad_users == []:
+        await message.answer('Сообщение было доставлено всем пользователям!')
+    else:
+        bad_users = '\n'.join(bad_users)
+        await message.answer('Сообщение было доставлено всем пользователям!\n'
+                             'Кроме:\n'
+                             f'<b>{bad_users}</b>'
+                             f'\n'
+                             f'<b>Они не подписаны на бот!</b>')
+    list_of_users.clear()
+    message_to_users.clear()
+    await state.clear()
