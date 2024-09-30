@@ -149,8 +149,6 @@ async def mac_converter_func_up(message: Message, state: FSMContext):
                          f'<pre>{mac_converter(message.text, F.data, True)}</pre>',
                          reply_markup=exit_convert_upper)
 
-    await state.clear()
-
 
 @router.callback_query(Mac_conv_state.mac_conv_lower, F.data.in_({'colon_1_callback',
                                                                   'point_1_callback',
