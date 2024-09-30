@@ -199,5 +199,3 @@ async def mac_converter_func_low(message: Message, state: FSMContext):
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'
                          f'<pre>{mac_converter(message.text, F.data, False)}</pre>',
                          reply_markup=exit_convert_lower)
-
-    await state.clear()
