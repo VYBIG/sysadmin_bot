@@ -1,10 +1,11 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery, Message, BufferedInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.enums import ChatAction
+from aiogram.enums import ChatAction, ContentType
 import requests
+import os
 import time
 import re
 import json
@@ -72,7 +73,9 @@ async def mac_converter_default(callback: CallbackQuery, state: FSMContext):
                                   'конвертировать MAC-Адреса \n'
                                   'Так же выберите формат конвертации\n'
                                   '<b>А так же размер букв</b>\n'
-                                  '(нужный отмечен ✅)',
+                                  '(нужный отмечен ✅)\n'
+                                  '<b>Так же я могу принять файл в формате .txt \n'
+                                  'если длина сообщения будет больше 4096 символов</b>',
                                   reply_markup=mac_convert_upper)
 
 
@@ -85,7 +88,9 @@ async def mac_converter_low(callback: CallbackQuery, state: FSMContext):
                                      'конвертировать MAC-Адреса \n'
                                      'Так же выберите формат конвертации\n'
                                      '<b>А так же размер букв</b>\n'
-                                     '(нужный отмечен ✅)',
+                                     '(нужный отмечен ✅)\n'
+                                     '<b>Так же я могу принять файл в формате .txt \n'
+                                     'если длина сообщения будет больше 4096 символов</b>',
                                      reply_markup=mac_convert_lower)
 
 
@@ -97,7 +102,9 @@ async def mac_converter_up(callback: CallbackQuery, state: FSMContext):
                                      'конвертировать MAC-Адреса \n'
                                      'Так же выберите формат конвертации\n'
                                      '<b>А так же размер букв</b>\n'
-                                     '(нужный отмечен ✅)',
+                                     '(нужный отмечен ✅)\n'
+                                     '<b>Так же я могу принять файл в формате .txt \n'
+                                     'если длина сообщения будет больше 4096 символов</b>',
                                      reply_markup=mac_convert_upper)
 
 
@@ -133,7 +140,8 @@ async def mac_converter_up_func(callback: CallbackQuery, state: FSMContext):
         mac_form_up = "XXXXXXXXXXXX"
     await state.set_state(Mac_conv_state.mac_conv_up)
     await callback.message.edit_text(f'Был выбран формат <code>{mac_form_up}</code>\n'
-                                     'Напишите в стоблик свои мак адреса\n\n'
+                                     'Напишите в стоблик свои мак адреса\n'
+                                     'Или отправьте файл в формате <b>.txt</b>\n\n'
                                      'Пример:\n'
                                      '<code>FF:FF:FF:FF:FF:FF</code>\n'
                                      '<code>11:11:11:11:11:11</code>\n'
@@ -142,7 +150,31 @@ async def mac_converter_up_func(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(Mac_conv_state.mac_conv_up,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
+                F.content_type == ContentType.DOCUMENT,
+                )
+async def mac_converter_func_up_file(message: Message, state: FSMContext):
+    main_log(message=message)
+    await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+    file_id = message.document.file_id
+    await message.bot.download(file_id, f"{file_id}.txt")
+    file = open(f"{file_id}.txt", 'r', encoding='UTF-8')
+    new_file = open(f"{file_id}_new.txt", 'w')
+    join_file = ''.join(file)
+    file.close()
+    new_file.write(mac_converter(join_file, F.data, True))
+    new_file.close()
+    new_file = open(f"{file_id}_new.txt", 'rb').read()
+    macs_file = BufferedInputFile(new_file, filename="macs.txt", )
+    await message.bot.send_document(message.chat.id,
+                                    document=macs_file,
+                                    caption='Конвертированные MAC-Адреса')
+    os.remove(f"{file_id}_new.txt"), os.remove(f"{file_id}.txt")
+    await state.clear()
+
+
+@router.message(Mac_conv_state.mac_conv_up,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'),
+                )
 async def mac_converter_func_up(message: Message, state: FSMContext):
     main_log(message=message)
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'
@@ -182,7 +214,8 @@ async def mac_converter_low_func(callback: CallbackQuery, state: FSMContext):
         mac_form_low = "xxxxxxxxxxxx"
     await state.set_state(Mac_conv_state.mac_conv_low)
     await callback.message.edit_text(f'Был выбран формат <code>{mac_form_low}</code>\n'
-                                     'Напишите в стоблик свои мак адреса\n\n'
+                                     'Напишите в стоблик свои мак адреса\n'
+                                     'Или отправьте файл в формате <b>.txt</b>\n\n'
                                      'Пример:\n'
                                      '<code>ff:ff:ff:ff:ff:ff</code>\n'
                                      '<code>11:11:11:11:11:11</code>\n'
@@ -191,7 +224,30 @@ async def mac_converter_low_func(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(Mac_conv_state.mac_conv_low,
-                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
+                F.content_type == ContentType.DOCUMENT)
+async def mac_converter_func_up_file(message: Message, state: FSMContext):
+    main_log(message=message)
+    await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+    file_id = message.document.file_id
+    await message.bot.download(file_id, f"{file_id}.txt")
+    file = open(f"{file_id}.txt", 'r', encoding='UTF-8')
+    new_file = open(f"{file_id}_new.txt", 'w')
+    join_file = ''.join(file)
+    file.close()
+    new_file.write(mac_converter(join_file, F.data, False))
+    new_file.close()
+    new_file = open(f"{file_id}_new.txt", 'rb').read()
+    macs_file = BufferedInputFile(new_file, filename="macs.txt", )
+    await message.bot.send_document(message.chat.id,
+                                    document=macs_file,
+                                    caption='Конвертированные MAC-Адреса')
+    os.remove(f"{file_id}_new.txt"), os.remove(f"{file_id}.txt")
+    await state.clear()
+
+
+@router.message(Mac_conv_state.mac_conv_low,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'),
+                )
 async def mac_converter_func_low(message: Message, state: FSMContext):
     main_log(message=message)
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'

@@ -3,7 +3,8 @@ from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from kb import ip_calc_kb, back_to_ip_calc, back_to_main_menu
+from kb import ip_calc_kb, back_to_ip_calc, \
+    back_to_main_menu, ip_calc_kb_wo_to_bit
 from ipaddress import IPv4Address, AddressValueError, \
     IPv4Interface, NetmaskValueError
 from .mask_FAQ import mask
@@ -14,6 +15,11 @@ router = Router(name=__name__)
 
 class Ip_calc_state(StatesGroup):
     user_ip_address = State()
+    ip_with_bit = State()
+
+
+def to_bit(ip):
+    return '.'.join([bin(int(x) + 256)[3:] for x in ip.split('.')])
 
 
 def ip_address_type(ip):
@@ -35,6 +41,16 @@ def ip_address_type(ip):
 @router.callback_query(Ip_calc_state.user_ip_address, F.data == 'ip_calc_back')
 async def ip_calc(callback: CallbackQuery, state: FSMContext):
     main_log(callback=callback)
+    await callback.message.edit_text('Это IP Калькулятор 🧮\n\n\n'
+                                     'Введите IP в формате IP/маска 🔢/🎭)\n',
+                                     reply_markup=ip_calc_kb)
+
+
+@router.callback_query(Ip_calc_state.ip_with_bit, F.data == 'no_to_bit')
+async def ip_calc_no_bit(callback: CallbackQuery, state: FSMContext):
+    main_log(callback=callback)
+    await callback.answer(cache_time=1)
+    await state.set_state(Ip_calc_state.user_ip_address)
     await callback.message.edit_text('Это IP Калькулятор 🧮\n\n\n'
                                      'Введите IP в формате IP/маска 🔢/🎭)\n',
                                      reply_markup=ip_calc_kb)
@@ -62,6 +78,18 @@ async def ip_calc(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=ip_calc_kb)
 
 
+@router.callback_query(Ip_calc_state.user_ip_address, F.data == 'to_bit')
+async def ip_calc_bit(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.answer(cache_time=1)
+    await state.set_state(Ip_calc_state.ip_with_bit)
+    main_log(callback=callback)
+    await callback.message.edit_text('Это IP Калькулятор 🧮\n\n\n'
+                                     'Введите IP в формате IP/маска 🔢/🎭)\n'
+                                     '<b>в Скобках будут IP в двоичном формате</b>',
+                                     reply_markup=ip_calc_kb_wo_to_bit)
+
+
 @router.callback_query(Ip_calc_state.user_ip_address, F.data == 'mask_faq')
 async def ip_calc_mask(callback: CallbackQuery, state: FSMContext):
     main_log(callback=callback)
@@ -72,6 +100,12 @@ async def ip_calc_mask(callback: CallbackQuery, state: FSMContext):
 async def ip_calc_mask(callback: CallbackQuery):
     main_log(callback=callback)
     await callback.message.edit_text(text=mask)
+
+
+@router.callback_query(F.data.in_({'no_to_bit', 'to_bit'}))
+async def ip_calc(callback: CallbackQuery):
+    main_log(callback=callback)
+    await callback.message.edit_text('<blockquote>Это сообщение давно позади =)</blockquote>')
 
 
 @router.message(Ip_calc_state.user_ip_address,
@@ -101,6 +135,58 @@ async def ip_calc_state(message: Message, state: FSMContext):
                                  f'<b>Всего доступных адресов в сети</b> : <code>{accessible_ip}'
                                  f'</code>\n\n'
                                  , reply_markup=back_to_main_menu)
+
+
+        except AddressValueError:
+            await message.answer('<b>Не корректный IP адрес</b> ⁉️\n'
+                                 'Повторите ввод:',
+                                 reply_markup=back_to_main_menu)
+        except NetmaskValueError:
+            await message.answer('<b>Не корректная Маска</b> ⁉️\n'
+                                 'Повторите ввод:'
+                                 , reply_markup=back_to_main_menu)
+    else:
+        await message.answer('<b>Запись Адреса не корректна</b> ⁉️\n'
+                             'Повторите ввод:',
+                             reply_markup=back_to_main_menu)
+
+
+@router.message(Ip_calc_state.ip_with_bit,
+                ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
+async def ip_calc_state_with_bit(message: Message, state: FSMContext):
+    main_log(message=message)
+    if '/' in message.text:
+        try:
+            ip = IPv4Interface(message.text)
+            if str(ip.compressed).split("/")[-1] in ['31', '32']:
+                min_ip = list(ip.network.hosts())[0]
+                accessible_ip = ip.network.num_addresses
+            else:
+                min_ip = list(ip.network.hosts())[1]
+                accessible_ip = int(ip.network.num_addresses) - 2
+
+            await message.answer(f'<b>Ваш IP адрес</b> : <code>{ip.ip}</code>'
+                                 f'\n(<code>{to_bit(str(ip.ip))}</code>)\n\n'
+                                 f'<b>Тип вашего IP</b> : <code>{ip_address_type(ip)}</code>\n\n'
+                                 f'<b>Короткая Маска</b> : <code>{str(ip.compressed).split("/")[-1]}</code>\n\n'
+                                 f'<b>Длинная Маска</b> : <code>{ip.netmask}</code>'
+                                 f'\n(<code>{to_bit(str(ip.netmask))}</code>)\n\n'
+                                 f'<b>Обратная маска</b> : <code>{str(ip.with_hostmask).split("/")[-1]}</code>'
+                                 f'\n(<code>{to_bit(str(ip.with_hostmask).split("/")[-1])}</code>)\n\n'
+                                 f'<b>Общая сеть</b> : <code>{ip.network.network_address}</code>'
+                                 f'\n(<code>{to_bit(str(ip.network.network_address))}</code>)\n\n'
+                                 f'<b>Шлюз по Умолчанию</b> : <code>{list(ip.network.hosts())[0]}</code>'
+                                 f'\n(<code>{to_bit(str(list(ip.network.hosts())[0]))}</code>)\n\n'
+                                 f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>'
+                                 f'\n(<code>{to_bit(str(ip.network.broadcast_address))}</code>)\n\n'
+                                 f'<b>Минимальный IP</b> : <code>{min_ip}</code>'
+                                 f'\n(<code>{to_bit(str(min_ip))}</code>)\n\n'
+                                 f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>'
+                                 f'\n(<code>{to_bit(str(list(ip.network.hosts())[-1]))}</code>)\n\n'
+                                 f'<b>Всего доступных адресов в сети</b> : <code>{accessible_ip}'
+                                 f'</code>\n\n'
+                                 , reply_markup=back_to_main_menu)
+
 
         except AddressValueError:
             await message.answer('<b>Не корректный IP адрес</b> ⁉️\n'

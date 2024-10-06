@@ -21,6 +21,7 @@ main_menu_2 = [
     [InlineKeyboardButton(text="🈳 Полезные команды", callback_data='useful_command')],
     [InlineKeyboardButton(text="🔢 Генератор Паролей", callback_data='password_gen')],
     [InlineKeyboardButton(text="#️⃣ Создать QR-код", callback_data='QR_code_maker')],
+    [InlineKeyboardButton(text="📨 Конвертер Файлов", callback_data='file_converter')],
     [InlineKeyboardButton(text="⏪ Назад", callback_data='back_menu_1')]]
 
 # Клавиатура выхода в основное меню
@@ -33,9 +34,15 @@ main_menu_2 = InlineKeyboardMarkup(inline_keyboard=main_menu_2)
 exit_menu_1 = InlineKeyboardMarkup(inline_keyboard=exit_menu_1)
 exit_menu_2 = InlineKeyboardMarkup(inline_keyboard=exit_menu_2)
 
-ip_calc_kb = [[InlineKeyboardButton(text="🎭 Открыть Памятку Масок", callback_data='mask_faq')],
-              [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='back_menu_1')]]
+ip_calc_kb = [[InlineKeyboardButton(text="🎭 Открыть Памятку Масок ", callback_data='mask_faq')],
+              [InlineKeyboardButton(text="0️⃣1️⃣ Добавить IP в двоичном формате  ", callback_data='to_bit')],
+              [InlineKeyboardButton(text="Вернуться Назад ⬅️", callback_data='back_menu_1')]]
 back_to_ip_calc = [[InlineKeyboardButton(text="⬅️ Вернуться в IP Калькулятор", callback_data='ip_calc_back')]]
+
+ip_calc_kb_wo_to_bit = [[InlineKeyboardButton(text="🎭О ткрыть Памятку Масоr", callback_data='mask_faq')],
+                        [InlineKeyboardButton(text="🔢 Убрать двоичный формат", callback_data='no_to_bit')],
+                        [InlineKeyboardButton(text="Вернуться Назад ⬅️", callback_data='back_menu_1')]]
+ip_calc_kb_wo_to_bit = InlineKeyboardMarkup(inline_keyboard=ip_calc_kb_wo_to_bit)
 
 ip_calc_kb = InlineKeyboardMarkup(inline_keyboard=ip_calc_kb)
 back_to_ip_calc = InlineKeyboardMarkup(inline_keyboard=back_to_ip_calc)
