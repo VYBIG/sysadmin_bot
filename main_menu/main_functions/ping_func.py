@@ -45,7 +45,7 @@ async def ping_fc(message: Message, state: FSMContext):
         if IPv4Address(message.text).is_global:
             await message.bot.send_chat_action(chat_id=message.chat.id,
                                                action=ChatAction.TYPING)
-            time.sleep(4)
+            time.sleep(1)
             if ping(message.text):
                 await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅',
                                      reply_markup=back_to_main_menu)
@@ -59,7 +59,7 @@ async def ping_fc(message: Message, state: FSMContext):
     except AddressValueError:
         try:
             await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-            time.sleep(2)
+            time.sleep(1)
             if ping(message.text):
                 await message.answer(f'{message.text} - <b>Доступен по ICMP</b> ✅', 
                                      reply_markup=back_to_main_menu)
