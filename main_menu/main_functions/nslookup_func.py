@@ -42,7 +42,7 @@ async def nslookup(message: Message, state: FSMContext):
     try:
         ip = IPv4Interface(message.text)
         await message.answer(f'IP <code>{message.text}</code> резолвится как:\n'
-                             f'<pre>{ns_look_up(message.text,False)}</pre>',
+                             f'<pre>{ns_look_up(message.text,False).decode("utf-8")}</pre>',
                              reply_markup=exit_menu_2
                              )
 

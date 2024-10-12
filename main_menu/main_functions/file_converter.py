@@ -7,6 +7,6 @@ router = Router(name=__name__)
 
 
 @router.callback_query(F.data == 'file_converter')
-async def nslookup(callback: CallbackQuery):
+async def file_converter(callback: CallbackQuery):
     main_log(callback=callback)
     await callback.message.edit_text('Функция в Разработке!', reply_markup=exit_menu_2)
