@@ -48,7 +48,7 @@ async def nslookup(message: Message, state: FSMContext):
 
     except AddressValueError:
         await message.answer(f'<code>{message.text} </code> соответствует адресам:\n'
-                             f'<pre>{ns_look_up(message.text, True)}</pre>',
+                             f'<pre>{ns_look_up(message.text, True).decode("utf-8")}</pre>',
                              reply_markup=exit_menu_2)
     except subprocess.CalledProcessError:
         await message.answer('<b>Запись не корректна</b> ⁉️\n'
