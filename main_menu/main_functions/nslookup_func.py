@@ -1,6 +1,5 @@
 import subprocess
 from ipaddress import AddressValueError, IPv4Interface
-
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -40,25 +39,23 @@ async def nslookup_main_fc(callback: CallbackQuery, state: FSMContext):
 async def nslookup(message: Message, state: FSMContext):
     main_log(message=message)
     try:
-        ip = IPv4Interface(message.text)
+        IPv4Interface(message.text)
         await message.answer(f'IP <code>{message.text}</code> резолвится как:\n'
                              f'<pre>{ns_look_up(message.text,False).decode("utf-8")}</pre>',
                              reply_markup=exit_menu_2
                              )
 
     except AddressValueError:
-        try:
-            await message.answer(f'<code>{message.text} </code>соответствует адресам:\n'
-                                 f'<pre>{ns_look_up(message.text, True).decode("utf-8")}</pre>',
-                                 reply_markup=exit_menu_2)
-        except subprocess.CalledProcessError:
-            await message.answer('<b>Запись не корректна</b> ⁉️\n'
-                                 'Повторите ввод:',
-                                 reply_markup=exit_menu_2)
+        await message.answer(f'<code>{message.text}</code>соответствует адресам:\n'
+                             f'<pre>{ns_look_up(message.text, True).decode("utf-8")}</pre>',
+                             reply_markup=exit_menu_2)
     except subprocess.CalledProcessError:
         await message.answer('<b>Запись не корректна</b> ⁉️\n'
-                             'Повторите ввод:',
-                             reply_markup=exit_menu_2)
-
+                             'Повторите ввод:'
+                             , reply_markup=exit_menu_2)
+    except:
+        await message.answer('<b>Запись не корректна</b> ⁉️\n'
+                             'Повторите ввод:'
+                             , reply_markup=exit_menu_2)
 
 

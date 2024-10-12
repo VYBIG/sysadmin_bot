@@ -1,8 +1,5 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-# Функции Бота:
-# чей номер телефона https://apertonet.ru/zvonit/
-
 # Клавиатура основного меню
 main_menu_1 = [
     [InlineKeyboardButton(text="🧮 IP Калькулятор", callback_data='ip_calc')],

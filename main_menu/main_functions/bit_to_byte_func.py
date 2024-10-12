@@ -1,6 +1,5 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
-
 from kb import exit_menu_1
 from common_functions import main_log
 router = Router(name=__name__)

@@ -16,7 +16,6 @@ from .tracert_func import router as tracert_router
 from .useful_command_func import router as useful_command_router
 from .mac_converter_func import router as mac_converter_router
 from .file_converter import router as file_converter_router
-
 router = Router()
 
 router.include_routers(bit_to_byte_router,
@@ -32,5 +31,5 @@ router.include_routers(bit_to_byte_router,
                        tracert_router,
                        useful_command_router,
                        mac_converter_router,
-                       file_converter_router
+                       file_converter_router,
                        )
