@@ -17,6 +17,8 @@ class Ping_state(StatesGroup):
 
 
 def ping(ip):
+    if ';' in ip or '|' in ip or '&' in ip:
+        raise subprocess.CalledProcessError(returncode=2,cmd=f"ping -c 1 {ip}")
     process = subprocess.Popen(f"ping -c 1 {ip}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.wait()
     if process.returncode == 0:
