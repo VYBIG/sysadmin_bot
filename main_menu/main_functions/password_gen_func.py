@@ -63,9 +63,9 @@ async def password_gen_count(message: Message,
         if count not in [i for i in range(1, 51)]:
             raise IndexError
         await message.answer_poll(question='Заполните форму ниже \n'
-                                           'и нажмите кнопкe:'
+                                           'и нажмите кнопку:\n'
                                            '<b>Голосовать</b>\n'
-                                           f'<b>Длина пароля составляет'
+                                           f'<b>Длина пароля составляет:\n'
                                            f' {message.text} '
                                            f'- Символов</b>',
                                   options=['Цифры 0-9',
