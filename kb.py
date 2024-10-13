@@ -95,3 +95,13 @@ exit_convert_lower = [[InlineKeyboardButton(text="⬅️ Назад", callback_d
 
 exit_convert_upper = InlineKeyboardMarkup(inline_keyboard=exit_convert_upper)
 exit_convert_lower = InlineKeyboardMarkup(inline_keyboard=exit_convert_lower)
+
+pass_gen_kb_1 = [
+    [InlineKeyboardButton(text="⏩ Продолжить ", callback_data='passgen_continue')]]
+
+pass_gen_kb_1 = InlineKeyboardMarkup(inline_keyboard=pass_gen_kb_1)
+
+pass_gen_kb_2 = [
+    [InlineKeyboardButton(text="⏩ Продолжить ", callback_data='passgen_continue_2')]]
+
+pass_gen_kb_2 = InlineKeyboardMarkup(inline_keyboard=pass_gen_kb_2)

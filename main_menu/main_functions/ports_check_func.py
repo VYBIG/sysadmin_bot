@@ -41,14 +41,14 @@ def check_ports_handler(ip_ports: str):
     count = 0
     if '/' not in ip_ports:
         raise SplitRecordError
-    if "-" not in ip_ports.split('/')[1]:
+    if "-" not in ip_ports.split('/')[1] and ',' not in ip_ports.split('/')[1]:
         try:
             int(ip_ports.split('/')[1])
+            if int(ip_ports.split('/')[1]) not in [i for i in range(1, 65536)]:
+                raise PortsNumberError
         except:
             raise PortsNumberError
-        if int(ip_ports.split('/')[1]) not in [i for i in range(1, 65536)]:
-            raise PortsNumberError
-    if "-" in ip_ports.split('/')[1]:
+    elif "-" in ip_ports.split('/')[1]:
         try:
             ports = ip_ports.split('/')[1].split('-')
             if int(ports[1]) - int(ports[0]) <= 0:
@@ -62,6 +62,13 @@ def check_ports_handler(ip_ports: str):
                 raise PortsCountError
         except:
             raise PortsNumberError
+    elif ',' in ip_ports.split('/')[1]:
+        ports = ip_ports.split('/')[1].split(',')
+        if len(ports) > 5:
+            raise PortsCountError
+        for i in range(0, len(ports)):
+            if int(ports[i]) not in [i for i in range(1, 65536)]:
+                raise PortsNumberError
 
 
 def udp_ports(ip, port):
@@ -146,6 +153,21 @@ async def ports_check_fc_udp(message: Message, state: FSMContext):
                                                     message_id=message_id.message_id
                                                     , reply_markup=back_to_main_menu)
                 await state.clear()
+            elif ',' in ip[-1]:
+                message_id = await message.answer(f'Начинаю сканирование портов <b>UDP</b> {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+                ports = ip[-1].split(',')
+                for i in range(len(ports)):
+                    try:
+                        ports_check_message_udp += f'<blockquote>{udp_ports(ip[0], ports[i])}</blockquote>\n\n'
+                    except CalledProcessError:
+                        ports_check_message_udp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                                                   f"(udp) timed out:</blockquote>\n\n"
+                await message.bot.edit_message_text(chat_id=message_id.chat.id,
+                                                    text=ports_check_message_udp,
+                                                    message_id=message_id.message_id
+                                                    , reply_markup=back_to_main_menu)
+                await state.clear()
             else:
                 message_id = await message.answer(f'Начинаю сканирование порта <b>UDP</b> {ip[-1]} у {ip[0]}')
                 await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
@@ -203,6 +225,21 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
                     except CalledProcessError:
                         ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {str(i)} " \
                                                    f"(tcp) timed out:</blockquote>\n\n"
+                await message.bot.edit_message_text(chat_id=message_id.chat.id,
+                                                    text=ports_check_message_tcp,
+                                                    message_id=message_id.message_id
+                                                    , reply_markup=back_to_main_menu)
+                await state.clear()
+            elif ',' in ip[-1]:
+                message_id = await message.answer(f'Начинаю сканирование портов <b>UDP</b> {ip[-1]} у {ip[0]}')
+                await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
+                ports = ip[-1].split(',')
+                for i in range(len(ports)):
+                    try:
+                        ports_check_message_tcp += f'<blockquote>{udp_ports(ip[0], ports[i])}</blockquote>\n\n'
+                    except CalledProcessError:
+                        ports_check_message_tcp += f"<blockquote>connect to {ip[0]} port {ports[i]} " \
+                                                   f"(udp) timed out:</blockquote>\n\n"
                 await message.bot.edit_message_text(chat_id=message_id.chat.id,
                                                     text=ports_check_message_tcp,
                                                     message_id=message_id.message_id
