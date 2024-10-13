@@ -64,7 +64,7 @@ async def password_gen_count(message: Message,
             raise IndexError
         await message.answer_poll(question='Заполните форму ниже \n'
                                            'и нажмите кнопку:\n'
-                                           '<b>Голосовать</b>\n'
+                                           '"<b>Голосовать</b>"\n\n'
                                            f'<b>Длина пароля составляет:\n'
                                            f' {message.text} '
                                            f'- Символов</b>',
