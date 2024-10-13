@@ -64,7 +64,6 @@ def bit_to_byte_conferter_func_add(dig, c_from, c_to):
 
 
 def bit_to_byte_conferter_func(dig, c_from, c_to):
-    print(dig, c_from, c_to)
     if c_from == c_to:
         return dig
     if 'Бит' in c_from and 'Байт' in c_to:
@@ -77,10 +76,8 @@ def bit_to_byte_conferter_func(dig, c_from, c_to):
         dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
     if 'Байт' in c_from and 'Байт' in c_to:
         dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
-    if dig // 10 == 0:
-        return dig
+    if dig % 10 == 0.0:
+        return f'{dig:.0f}'
     else:
         return f'{dig:.2f}'
 
-
-print(bit_to_byte_conferter_func(15.6, 'КилоБит', 'ГигаБайт'))
