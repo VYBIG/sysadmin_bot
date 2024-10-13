@@ -33,3 +33,54 @@ def main_log(message=None, callback=None, pool=None):
             f'user_full_name={user_full_name}, '
             f'user_message={user_message}, '
             f'username = {username}')
+
+
+def bit_to_byte_conferter_func_add(dig, c_from, c_to):
+    if 'Кило' in c_from:
+        dig = dig * 1024
+    elif 'Мега' in c_from:
+        dig = dig * 1024 * 1024
+    elif 'Гига' in c_from:
+        dig = dig * 1024 * 1024 * 1024
+    elif 'Тера' in c_from:
+        dig = dig * 1024 * 1024 * 1024 * 1024
+    elif 'Пета' in c_from:
+        dig = dig * 1024 * 1024 * 1024 * 1024 * 1024
+    elif 'Экса' in c_from:
+        dig = dig * 1024 * 1024 * 1024 * 1024 * 1024 * 1024
+    if 'Кило' in c_to:
+        dig = dig / 1024
+    elif 'Мега' in c_to:
+        dig = dig / 1024 / 1024
+    elif 'Гига' in c_to:
+        dig = dig / 1024 / 1024 / 1024
+    elif 'Тера' in c_to:
+        dig = dig / 1024 * 1024 * 1024 * 1024
+    elif 'Пета' in c_to:
+        dig = dig / 1024 / 1024 * 1024 * 1024 * 1024
+    elif 'Экса' in c_to:
+        dig = dig / 1024 / 1024 / 1024 / 1024 / 1024 / 1024
+    return dig
+
+
+def bit_to_byte_conferter_func(dig, c_from, c_to):
+    print(dig, c_from, c_to)
+    if c_from == c_to:
+        return dig
+    if 'Бит' in c_from and 'Байт' in c_to:
+        dig = dig / 8
+        dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
+    if 'Байт' in c_from and 'Бит' in c_to:
+        dig = dig * 8
+        dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
+    if 'Бит' in c_from and 'Бит' in c_to:
+        dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
+    if 'Байт' in c_from and 'Байт' in c_to:
+        dig = bit_to_byte_conferter_func_add(dig, c_from, c_to)
+    if dig // 10 == 0:
+        return dig
+    else:
+        return f'{dig:.2f}'
+
+
+print(bit_to_byte_conferter_func(15.6, 'КилоБит', 'ГигаБайт'))

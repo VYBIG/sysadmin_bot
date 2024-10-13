@@ -71,7 +71,7 @@ mac_convert_upper = \
      [InlineKeyboardButton(text="XXXX.XXXX.XXXX", callback_data='point_2_callback'),
       InlineKeyboardButton(text="XXXX-XXXX-XXXX", callback_data='hyphen_2_callback')],
      [InlineKeyboardButton(text="XXXXXXXXXXXX", callback_data='solid_callback'),
-      InlineKeyboardButton(text="⬅️Назад", callback_data='back_menu_1')]
+      InlineKeyboardButton(text="⬅️ Назад", callback_data='back_menu_1')]
      ]
 
 mac_convert_lower = \
@@ -84,7 +84,7 @@ mac_convert_lower = \
      [InlineKeyboardButton(text="xxxx.xxxx.xxxx", callback_data='point_2_callback'),
       InlineKeyboardButton(text="xxxx-xxxx-xxxx", callback_data='hyphen_2_callback')],
      [InlineKeyboardButton(text="xxxxxxxxxxxx", callback_data='solid_callback'),
-      InlineKeyboardButton(text="⬅️Назад", callback_data='back_menu_1')]
+      InlineKeyboardButton(text="⬅️ Назад", callback_data='back_menu_1')]
      ]
 
 mac_convert_upper = InlineKeyboardMarkup(inline_keyboard=mac_convert_upper)
@@ -105,3 +105,32 @@ pass_gen_kb_2 = [
     [InlineKeyboardButton(text="⏩ Продолжить ", callback_data='passgen_continue_2')]]
 
 pass_gen_kb_2 = InlineKeyboardMarkup(inline_keyboard=pass_gen_kb_2)
+
+bit_to_byte_menu = \
+    [[InlineKeyboardButton(text="Бит", callback_data='bit'),
+      InlineKeyboardButton(text="Байт", callback_data='byte')],
+     [InlineKeyboardButton(text="КилоБит", callback_data='kbit'),
+      InlineKeyboardButton(text="КилоБайт", callback_data='kbyte')],
+     [InlineKeyboardButton(text="МегаБит", callback_data='mbit'),
+      InlineKeyboardButton(text="МегаБайт", callback_data='mbyte')],
+     [InlineKeyboardButton(text="ГигаБит", callback_data='gbit'),
+      InlineKeyboardButton(text="ГигаБайт", callback_data='gbyte')],
+     [InlineKeyboardButton(text="ТераБит", callback_data='tbit'),
+      InlineKeyboardButton(text="ТераБайт", callback_data='tbyte')],
+     [InlineKeyboardButton(text="ПетаБит", callback_data='pbit'),
+      InlineKeyboardButton(text="ПетаБайт", callback_data='pbyte')],
+     [InlineKeyboardButton(text="ЭксаБит", callback_data='ebit'),
+      InlineKeyboardButton(text="ЭксаБайт", callback_data='ebyte')],
+     [InlineKeyboardButton(text="⬅️ Назад", callback_data='btby_back')]
+     ]
+
+bit_to_byte_table = [
+    [InlineKeyboardButton(text="🈸 Таблица Преобразования", callback_data='btby_table'),
+     InlineKeyboardButton(text="🔂 Начать Конвертацию", callback_data='btby_start')],
+    [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='next_menu_2')]]
+bit_to_byte_back = [
+    [InlineKeyboardButton(text="⬅️ Назад", callback_data='btby_back')]]
+
+bit_to_byte_menu = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_menu)
+bit_to_byte_table = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_table)
+bit_to_byte_back = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_back)

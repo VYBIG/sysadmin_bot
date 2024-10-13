@@ -114,6 +114,7 @@ async def ports_check_udp(callback: CallbackQuery, state: FSMContext):
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
                                      'Пример - (185.16.25.150/22) \n'
                                      'либо диапазон (185.16.25.150/20-22)\n'
+                                     '(185.16.25.150/20,22,554)\n'
                                      'Диапазон не больше 5 портов')
 
 
@@ -125,6 +126,7 @@ async def ports_check_tcp(callback: CallbackQuery, state: FSMContext):
                                      'Введите IP и порт в формате <b>IP/PORT</b>\n'
                                      'Пример - (185.16.25.150/22) \n'
                                      'либо диапазон (185.16.25.150/20-22)\n'
+                                     '(185.16.25.150/20,22,554)\n'
                                      'Диапазон не больше 5 портов')
 
 
@@ -281,3 +283,8 @@ async def ports_check_fc_tcp(message: Message, state: FSMContext):
         await message.answer('<b>Не верная форма записи </b>⁉️\n'
                              'Повторите ввод:'
                              , reply_markup=back_to_main_menu)
+
+
+@router.callback_query(F.data.in_({'udp_callback', 'byte', 'tcp_callback'}))
+async def unknown_func_pcf(callback: CallbackQuery):
+    await callback.message.edit_text('<blockquote>Это сообщение давно позади 😐</blockquote>')

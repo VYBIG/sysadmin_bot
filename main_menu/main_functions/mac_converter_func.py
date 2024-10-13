@@ -253,3 +253,18 @@ async def mac_converter_func_low(message: Message, state: FSMContext):
     await message.answer('<b>Конвертированные MAC-Адреса:</b>\n\n'
                          f'<pre>{mac_converter(message.text, F.data, False)}</pre>',
                          reply_markup=exit_convert_lower)
+
+
+@router.callback_query(F.data.in_({'back_to_lower',
+                                   'lower_callback',
+                                   'back_to_upper',
+                                   'upper_callback',
+                                   'colon_1_callback',
+                                   'point_1_callback',
+                                   'hyphen_1_callback',
+                                   'colon_2_callback',
+                                   'point_2_callback',
+                                   'hyphen_2_callback',
+                                   'solid_callback'}))
+async def unknown_func_mcf(callback: CallbackQuery):
+    await callback.message.edit_text('<blockquote>Это сообщение давно позади 😐</blockquote>')

@@ -1,10 +1,12 @@
-2024-10-12 23:53:24,915 INFO Start polling
-2024-10-12 23:53:25,112 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
-2024-10-12 23:53:25,396 INFO time=Sat Oct 12 23:53:25 2024, user_id=643541689, user_full_name=Василий, user_message=/start, username = VY_BIG
-2024-10-12 23:53:25,529 INFO Update id=681032062 is handled. Duration 328 ms by bot id=7261051868
-2024-10-12 23:53:26,605 INFO time=Sat Oct 12 23:53:26 2024, user_id=643541689, user_full_name=Василий, user_pressed=next_menu_2, username = VY_BIG
-2024-10-12 23:53:26,740 INFO Update id=681032063 is handled. Duration 139 ms by bot id=7261051868
-2024-10-12 23:53:30,410 INFO time=Sat Oct 12 23:53:30 2024, user_id=643541689, user_full_name=Василий, user_pressed=password_gen, username = VY_BIG
-2024-10-12 23:53:30,534 INFO Update id=681032064 is handled. Duration 125 ms by bot id=7261051868
-2024-10-12 23:54:38,862 INFO Polling stopped
-2024-10-12 23:54:39,115 INFO Polling stopped for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
+2024-10-13 17:54:30,540 INFO Start polling
+2024-10-13 17:54:30,745 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
+2024-10-13 17:54:30,911 INFO time=Sun Oct 13 17:54:30 2024, user_id=643541689, user_full_name=Василий, user_pressed=btby_back, username = VY_BIG
+2024-10-13 17:54:31,274 INFO Update id=681032516 is handled. Duration 375 ms by bot id=7261051868
+2024-10-13 17:54:32,346 INFO time=Sun Oct 13 17:54:32 2024, user_id=643541689, user_full_name=Василий, user_pressed=btby_start, username = VY_BIG
+2024-10-13 17:54:32,620 INFO Update id=681032517 is handled. Duration 280 ms by bot id=7261051868
+2024-10-13 17:54:36,038 INFO time=Sun Oct 13 17:54:36 2024, user_id=643541689, user_full_name=Василий, user_pressed=kbit, username = VY_BIG
+2024-10-13 17:54:36,198 INFO Update id=681032518 is handled. Duration 172 ms by bot id=7261051868
+2024-10-13 17:54:41,784 INFO time=Sun Oct 13 17:54:41 2024, user_id=643541689, user_full_name=Василий, user_pressed=byte, username = VY_BIG
+2024-10-13 17:54:42,177 INFO Update id=681032519 is handled. Duration 390 ms by bot id=7261051868
+2024-10-13 17:54:43,019 INFO time=Sun Oct 13 17:54:43 2024, user_id=643541689, user_full_name=Василий, user_message=50, username = VY_BIG
+2024-10-13 17:54:43,190 INFO Update id=681032520 is handled. Duration 170 ms by bot id=7261051868

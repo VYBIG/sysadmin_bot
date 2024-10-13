@@ -105,7 +105,7 @@ async def ip_calc_mask(callback: CallbackQuery):
 @router.callback_query(F.data.in_({'no_to_bit', 'to_bit'}))
 async def ip_calc(callback: CallbackQuery):
     main_log(callback=callback)
-    await callback.message.edit_text('<blockquote>Это сообщение давно позади =)</blockquote>')
+    await callback.message.edit_text('<blockquote>Это сообщение давно позади 😐</blockquote>')
 
 
 @router.message(Ip_calc_state.user_ip_address,
