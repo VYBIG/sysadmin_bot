@@ -36,7 +36,7 @@ ip_calc_kb = [[InlineKeyboardButton(text="🎭 Открыть Памятку М�
               [InlineKeyboardButton(text="Вернуться Назад ⬅️", callback_data='back_menu_1')]]
 back_to_ip_calc = [[InlineKeyboardButton(text="⬅️ Вернуться в IP Калькулятор", callback_data='ip_calc_back')]]
 
-ip_calc_kb_wo_to_bit = [[InlineKeyboardButton(text="🎭Открыть Памятку Масоr", callback_data='mask_faq')],
+ip_calc_kb_wo_to_bit = [[InlineKeyboardButton(text="🎭Открыть Памятку Масок", callback_data='mask_faq')],
                         [InlineKeyboardButton(text="🔢 Убрать двоичный формат", callback_data='no_to_bit')],
                         [InlineKeyboardButton(text="Вернуться Назад ⬅️", callback_data='back_menu_1')]]
 ip_calc_kb_wo_to_bit = InlineKeyboardMarkup(inline_keyboard=ip_calc_kb_wo_to_bit)
