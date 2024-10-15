@@ -36,7 +36,7 @@ async def command_gpt(message: Message, state: FSMContext) -> None:
     await state.clear()
     main_log(message=message)
     await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-    await message.answer(f"Решим Нейросети находится в разработке! 🔜")
+    await message.answer(f"Режим Нейросети находится в разработке! 🔜")
 
 
 @router.message(Command('get_id'))
