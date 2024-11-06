@@ -12,7 +12,6 @@ import json
 from kb import mac_convert_upper, mac_convert_lower, exit_convert_upper, exit_convert_lower
 from common_functions import main_log
 
-session = requests.Session()
 router = Router(name=__name__)
 
 

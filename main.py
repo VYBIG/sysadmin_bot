@@ -20,5 +20,5 @@ async def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, filename="sysadmins.txt",filemode="w",
                         format="%(asctime)s %(levelname)s %(message)s")
-    # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    #logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
