@@ -140,7 +140,7 @@ async def ip_calc_state(message: Message, state: FSMContext):
                 broadcast = soup[21].contents[0]
                 min_ip = IPv4Address(soup[25].contents[0]) + 1
                 max_ip = soup[29].contents[0]
-                accessible_ip = int(str(soup[33].contents[0]).replace(',', '')) - 1
+                accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))
 
             else:
                 main_ip = ip.ip
@@ -211,7 +211,7 @@ async def ip_calc_state_with_bit(message: Message, state: FSMContext):
                 broadcast = soup[21].contents[0]
                 min_ip = IPv4Address(soup[25].contents[0]) + 1
                 max_ip = soup[29].contents[0]
-                accessible_ip = int(str(soup[33].contents[0]).replace(',', '')) - 1
+                accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))
 
             else:
                 main_ip = ip.ip
