@@ -4,17 +4,19 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 import requests
+import bs4
 from aiogram.enums import ChatAction
 from ipaddress import IPv4Address, AddressValueError, IPv4Interface
 import subprocess
 import json
 from kb import back_to_main_menu
 from common_functions import main_log
+from .ip_info_for_non_routable import non_routable_ip
 
 
 def ip_address_type(ip):
     ip = IPv4Interface(ip).ip
-    if IPv4Address(ip).is_loopback:
+    if IPv4Interface(ip).is_loopback:
         return 'Loopback адрес'
     if IPv4Address(ip).is_global:
         return 'Белый IP'
@@ -55,13 +57,16 @@ async def ip_info_main(callback: CallbackQuery, state: FSMContext):
 async def ip_info_fc(message: Message, state: FSMContext):
     main_log(message=message)
     try:
+        ip_check = True
         ip = IPv4Address(message.text)
         await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-        if ip_address_type(ip) in ['Loopback адрес', 'Серый IP', 'Мультикаст IP']:
-            await message.answer('<b>О данном IP нету информации</b> ⁉️',
-                                 reply_markup=back_to_main_menu)
+        for address in non_routable_ip.keys():
+            if ip in address:
+                ip_check = False
+                await message.answer(f'{non_routable_ip[address]}',
+                                     reply_markup=back_to_main_menu)
 
-        else:
+        if ip_check:
             ip_info_json = json.loads(cURL(f'https://ipcheck.me/ru/{ip}'))
             await message.answer(f'<b>IP адрес</b> : <code>{ip_info_json["ip"]}</code>\n\n'
                                  f'<b>Компания</b> : <code>{ip_info_json["network"]["asn_organization"]}</code>\n\n'

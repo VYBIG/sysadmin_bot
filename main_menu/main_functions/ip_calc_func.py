@@ -1,14 +1,18 @@
 from aiogram import Router, F
+from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
+from bs4 import BeautifulSoup
+
 from kb import ip_calc_kb, back_to_ip_calc, \
     back_to_main_menu, ip_calc_kb_wo_to_bit
 from ipaddress import IPv4Address, AddressValueError, \
     IPv4Interface, NetmaskValueError
 from .mask_FAQ import mask
 from common_functions import main_log
+import requests
 
 router = Router(name=__name__)
 
@@ -114,24 +118,52 @@ async def ip_calc_state(message: Message, state: FSMContext):
     main_log(message=message)
     if '/' in message.text:
         try:
+            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
             ip = IPv4Interface(message.text)
-            if str(ip.compressed).split("/")[-1] in ['31', '32']:
-                min_ip = list(ip.network.hosts())[0]
-                accessible_ip = ip.network.num_addresses
+            if str(ip.compressed).split("/")[-1] in [str(i) for i in range(0, 15)] + ['31', '32']:
+                responce = requests.Session()
+
+                resp = responce.post(url='https://ip-calculator.ru/subnetcalc',
+                                     data={"ip": f"{ip.ip}",
+                                           "mask": f'{str(ip.compressed).split("/")[-1]}',
+                                           "ajax": "1"})
+
+                soup = BeautifulSoup(resp.text, "html.parser")
+                soup = soup.find_all('td')
+                main_ip = soup[1].contents[0]
+                ip_type = ip_address_type(soup[1].contents[0])
+                short_mask = soup[5].contents[0]
+                long_mask = soup[9].contents[0]
+                wildcard = soup[13].contents[0]
+                network = soup[17].contents[0]
+                gateway = soup[25].contents[0]
+                broadcast = soup[21].contents[0]
+                min_ip = IPv4Address(soup[25].contents[0]) + 1
+                max_ip = soup[29].contents[0]
+                accessible_ip = int(str(soup[33].contents[0]).replace(',', '')) - 1
+
             else:
+                main_ip = ip.ip
+                ip_type = ip_address_type(ip)
+                short_mask = str(ip.compressed).split("/")[-1]
+                long_mask = ip.netmask
+                wildcard = str(ip.with_hostmask).split("/")[-1]
+                network = ip.network.network_address
+                gateway = list(ip.network.hosts())[0]
+                broadcast = ip.network.broadcast_address
+                max_ip = list(ip.network.hosts())[-1]
                 min_ip = list(ip.network.hosts())[1]
                 accessible_ip = int(ip.network.num_addresses) - 2
-
-            await message.answer(f'<b>Ваш IP адрес</b> : <code>{ip.ip}</code>\n\n'
-                                 f'<b>Тип вашего IP</b> : <code>{ip_address_type(ip)}</code>\n\n'
-                                 f'<b>Короткая Маска</b> : <code>{str(ip.compressed).split("/")[-1]}</code>\n\n'
-                                 f'<b>Длинная Маска</b> : <code>{ip.netmask}</code>\n\n'
-                                 f'<b>Обратная маска</b> : <code>{str(ip.with_hostmask).split("/")[-1]}</code>\n\n'
-                                 f'<b>Общая сеть</b> : <code>{ip.network.network_address}</code>\n\n'
-                                 f'<b>Шлюз по Умолчанию</b> : <code>{list(ip.network.hosts())[0]}</code>\n\n'
-                                 f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>\n\n'
+            await message.answer(f'<b>Ваш IP адрес</b> : <code>{main_ip}</code>\n\n'
+                                 f'<b>Тип вашего IP</b> : <code>{ip_type}</code>\n\n'
+                                 f'<b>Короткая Маска</b> : <code>{short_mask}</code>\n\n'
+                                 f'<b>Длинная Маска</b> : <code>{long_mask}</code>\n\n'
+                                 f'<b>Обратная маска</b> : <code>{wildcard}</code>\n\n'
+                                 f'<b>Общая сеть</b> : <code>{network}</code>\n\n'
+                                 f'<b>Шлюз по Умолчанию</b> : <code>{gateway}</code>\n\n'
+                                 f'<b>Бродкаст адрес</b>: <code>{broadcast}</code>\n\n'
                                  f'<b>Минимальный IP</b> : <code>{min_ip}</code>\n\n'
-                                 f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>\n\n'
+                                 f'<b>Максимальный IP</b> : <code>{max_ip}</code>\n\n'
                                  f'<b>Всего доступных адресов в сети</b> : <code>{accessible_ip}'
                                  f'</code>\n\n'
                                  , reply_markup=back_to_main_menu)
@@ -157,32 +189,60 @@ async def ip_calc_state_with_bit(message: Message, state: FSMContext):
     main_log(message=message)
     if '/' in message.text:
         try:
+            await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
             ip = IPv4Interface(message.text)
-            if str(ip.compressed).split("/")[-1] in ['31', '32']:
-                min_ip = list(ip.network.hosts())[0]
-                accessible_ip = ip.network.num_addresses
+            if str(ip.compressed).split("/")[-1] in [str(i) for i in range(0, 15)] + ['31', '32']:
+                responce = requests.Session()
+
+                resp = responce.post(url='https://ip-calculator.ru/subnetcalc',
+                                     data={"ip": f"{ip.ip}",
+                                           "mask": f'{str(ip.compressed).split("/")[-1]}',
+                                           "ajax": "1"})
+
+                soup = BeautifulSoup(resp.text, "html.parser")
+                soup = soup.find_all('td')
+                main_ip = soup[1].contents[0]
+                ip_type = ip_address_type(soup[1].contents[0])
+                short_mask = soup[5].contents[0]
+                long_mask = soup[9].contents[0]
+                wildcard = soup[13].contents[0]
+                network = soup[17].contents[0]
+                gateway = soup[25].contents[0]
+                broadcast = soup[21].contents[0]
+                min_ip = IPv4Address(soup[25].contents[0]) + 1
+                max_ip = soup[29].contents[0]
+                accessible_ip = int(str(soup[33].contents[0]).replace(',', '')) - 1
+
             else:
+                main_ip = ip.ip
+                ip_type = ip_address_type(ip)
+                short_mask = str(ip.compressed).split("/")[-1]
+                long_mask = ip.netmask
+                wildcard = str(ip.with_hostmask).split("/")[-1]
+                network = ip.network.network_address
+                gateway = list(ip.network.hosts())[0]
+                broadcast = ip.network.broadcast_address
+                max_ip = list(ip.network.hosts())[-1]
                 min_ip = list(ip.network.hosts())[1]
                 accessible_ip = int(ip.network.num_addresses) - 2
-
-            await message.answer(f'<b>Ваш IP адрес</b> : <code>{ip.ip}</code>'
-                                 f'\n(<code>{to_bit(str(ip.ip))}</code>)\n\n'
-                                 f'<b>Тип вашего IP</b> : <code>{ip_address_type(ip)}</code>\n\n'
-                                 f'<b>Короткая Маска</b> : <code>{str(ip.compressed).split("/")[-1]}</code>\n\n'
-                                 f'<b>Длинная Маска</b> : <code>{ip.netmask}</code>'
-                                 f'\n(<code>{to_bit(str(ip.netmask))}</code>)\n\n'
-                                 f'<b>Обратная маска</b> : <code>{str(ip.with_hostmask).split("/")[-1]}</code>'
-                                 f'\n(<code>{to_bit(str(ip.with_hostmask).split("/")[-1])}</code>)\n\n'
-                                 f'<b>Общая сеть</b> : <code>{ip.network.network_address}</code>'
-                                 f'\n(<code>{to_bit(str(ip.network.network_address))}</code>)\n\n'
-                                 f'<b>Шлюз по Умолчанию</b> : <code>{list(ip.network.hosts())[0]}</code>'
-                                 f'\n(<code>{to_bit(str(list(ip.network.hosts())[0]))}</code>)\n\n'
-                                 f'<b>Бродкаст адрес</b>: <code>{ip.network.broadcast_address}</code>'
+            await message.answer(f'<b>Ваш IP адрес</b> : <code>{main_ip}</code>'
+                                 f'\n(<code>{to_bit(str(main_ip))}</code>)\n\n'
+                                 f'<b>Тип вашего IP</b> : <code>{ip_type}</code>\n\n'
+                                 f'<b>Короткая Маска</b> : <code>{short_mask}</code>\n\n'
+                                 f'<b>Длинная Маска</b> : <code>{long_mask}</code>'
+                                 f'\n(<code>{to_bit(long_mask)}</code>)\n\n'
+                                 f'<b>Обратная маска</b> : <code>{wildcard}</code>'
+                                 f'\n(<code>{to_bit(wildcard)}</code>)\n\n'
+                                 f'<b>Общая сеть</b> : <code>{network}</code>'
+                                 f'\n(<code>{to_bit(network)}</code>)\n\n'
+                                 f'<b>Шлюз по Умолчанию</b> : <code>{gateway}</code>'
+                                 f'\n(<code>{to_bit(gateway)}</code>)\n\n'
+                                 f'<b>Бродкаст адрес</b>: <code>{broadcast}</code>'
                                  f'\n(<code>{to_bit(str(ip.network.broadcast_address))}</code>)\n\n'
                                  f'<b>Минимальный IP</b> : <code>{min_ip}</code>'
                                  f'\n(<code>{to_bit(str(min_ip))}</code>)\n\n'
-                                 f'<b>Максимальный IP</b> : <code>{list(ip.network.hosts())[-1]}</code>'
-                                 f'\n(<code>{to_bit(str(list(ip.network.hosts())[-1]))}</code>)\n\n'
+                                 f'<b>Максимальный IP</b> : <code>{max_ip}</code>'
+                                 f'\n(<code>{to_bit(max_ip)}</code>)\n\n'
                                  f'<b>Всего доступных адресов в сети</b> : <code>{accessible_ip}'
                                  f'</code>\n\n'
                                  , reply_markup=back_to_main_menu)
