@@ -1,6 +1,88 @@
-2024-11-09 21:40:14,008 INFO Start polling
-2024-11-09 21:40:14,211 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
-2024-11-09 21:40:14,496 INFO time=Sat Nov  9 21:40:14 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_info, username = VY_BIG
-2024-11-09 21:40:14,605 INFO Update id=681032654 is handled. Duration 312 ms by bot id=7261051868
-2024-11-09 21:40:15,478 INFO time=Sat Nov  9 21:40:15 2024, user_id=643541689, user_full_name=Василий, user_message=192.88.99.1, username = VY_BIG
-2024-11-09 21:40:15,666 INFO Update id=681032655 is handled. Duration 202 ms by bot id=7261051868
+2024-12-08 19:10:21,717 INFO Start polling
+2024-12-08 19:10:21,993 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
+2024-12-08 19:10:22,441 INFO time=Sun Dec  8 19:10:22 2024, user_id=643541689, user_full_name=Василий, user_message=/start, username = VY_BIG
+2024-12-08 19:10:22,633 INFO Update id=681032727 is handled. Duration 515 ms by bot id=7261051868
+2024-12-08 19:10:24,709 INFO time=Sun Dec  8 19:10:24 2024, user_id=643541689, user_full_name=Василий, user_pressed=next_menu_2, username = VY_BIG
+2024-12-08 19:10:24,876 INFO Update id=681032728 is handled. Duration 171 ms by bot id=7261051868
+2024-12-08 19:10:25,793 INFO time=Sun Dec  8 19:10:25 2024, user_id=643541689, user_full_name=Василий, user_pressed=file_converter, username = VY_BIG
+2024-12-08 19:10:26,013 INFO Update id=681032729 is handled. Duration 235 ms by bot id=7261051868
+2024-12-08 19:10:27,296 INFO time=Sun Dec  8 19:10:27 2024, user_id=643541689, user_full_name=Василий, user_pressed=video_to_circle, username = VY_BIG
+2024-12-08 19:10:27,384 INFO Update id=681032730 is handled. Duration 110 ms by bot id=7261051868
+2024-12-08 19:10:32,057 INFO Update id=681032731 is not handled. Duration 125 ms by bot id=7261051868
+2024-12-08 19:10:32,057 ERROR Cause exception while process update id=681032731 by bot id=7261051868
+AttributeError: 'NoneType' object has no attribute 'user'
+Traceback (most recent call last):
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 170, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 142, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 137, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\router.py", line 162, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\main_menu\main_functions\file_converter.py", line 46, in video_to_circle_conv
+    main_log()
+  File "C:\Users\Василий Михайлович\PycharmProjects\pythonnetbot\common_functions.py", line 27, in main_log
+    user_id = pool.user.id
+              ^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'user'
+2024-12-08 19:11:03,339 INFO Polling stopped
+2024-12-08 19:11:03,590 INFO Polling stopped for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'

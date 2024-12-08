@@ -23,11 +23,21 @@ def main_log(message=None, callback=None, pool=None):
             f'user_full_name={user_full_name}, '
             f'user_message={user_message}, '
             f'username = {username}')
-    else:
+    elif pool is not None:
         user_id = pool.user.id
         user_full_name = pool.user.first_name
         user_message = pool.option_ids
         username = pool.user.username
+        logging.info(
+            f'time={time.asctime()}, user_id={user_id}, '
+            f'user_full_name={user_full_name}, '
+            f'user_message={user_message}, '
+            f'username = {username}')
+    elif message.file_id is not None:
+        user_id = message.from_user.id
+        user_full_name = message.from_user.full_name
+        user_message = message.file_id
+        username = message.from_user.username
         logging.info(
             f'time={time.asctime()}, user_id={user_id}, '
             f'user_full_name={user_full_name}, '

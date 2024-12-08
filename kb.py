@@ -134,3 +134,16 @@ bit_to_byte_back = [
 bit_to_byte_menu = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_menu)
 bit_to_byte_table = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_table)
 bit_to_byte_back = InlineKeyboardMarkup(inline_keyboard=bit_to_byte_back)
+
+file_converter_main = [
+    [InlineKeyboardButton(text="🌠 Видео ➡️ Кружочек ⭕️", callback_data='video_to_circle')],
+    [InlineKeyboardButton(text="🌠 Видео/MP3 ➡️ Голосовое 🗣", callback_data='video_mp3_to_voice')],
+    [InlineKeyboardButton(text="🌠 Видео ➡️ MP3 🎧", callback_data='video_to_mp3')],
+    [InlineKeyboardButton(text="📃 PDF ➡️ Word 🧾", callback_data='pdf_to_word')],
+    [InlineKeyboardButton(text="🏞 Heic ➡️ jpeg 🖼", callback_data='heic_to_jpeg')],
+    [InlineKeyboardButton(text="🖼 jpeg ➡️ png 📰", callback_data='jpeg_to_png')],
+    [InlineKeyboardButton(text="⬅️ Вернуться Назад", callback_data='next_menu_2')]]
+file_converter_main = InlineKeyboardMarkup(inline_keyboard=file_converter_main)
+
+back_to_file_converter = [[InlineKeyboardButton(text="⬅️ Вернуться обратно", callback_data='file_converter_back')]]
+back_to_file_converter = InlineKeyboardMarkup(inline_keyboard=back_to_file_converter)
