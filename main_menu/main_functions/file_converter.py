@@ -1,13 +1,16 @@
 import os
+import time
+
 from aiogram import Router, F
 from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import CallbackQuery, Message, FSInputFile, BufferedInputFile
+from aiogram.types import CallbackQuery, Message, BufferedInputFile
 from common_functions import main_log
 from kb import file_converter_main, exit_menu_2, back_to_file_converter
 from aiogram.exceptions import TelegramBadRequest
+from .any_file_converter import *
 
 router = Router(name=__name__)
 
@@ -42,20 +45,41 @@ async def file_conv_vid_to_cir(callback: CallbackQuery, state: FSMContext):
                 F.video,
                 ~Command('help', 'start', 'get_id', 'chat_gpt', 'cancel', 'get_log'))
 async def video_to_circle_conv(message: Message, state: FSMContext):
-    await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.RECORD_VIDEO_NOTE)
     main_log(message=message)
     file_id = message.video.file_id
     await message.bot.download(file_id, f"{file_id}.MP4")
-    new_video_file = open(f"{file_id}.MP4", 'rb').read()
-    circle_file = BufferedInputFile(new_video_file, f"{file_id}.MP4")
-    try:
-        await message.bot.send_video_note(message.chat.id,
-                                          video_note=circle_file)
-        os.remove(f"{file_id}.MP4")
-    except TelegramBadRequest:
-        os.remove(f"{file_id}.MP4")
-        await message.answer('Я не могу отправить вам Кружочек или голосовое \n'
-                             'пока вы не поправите настройки конфиденциальности')
+    if message.video.duration >= 60:
+        await message.answer('Видео Длиннее одной минуты\n'
+                             'Отправьте другой или ',reply_markup=back_to_file_converter)
+    elif message.video.file_size >= 50000000:
+        await message.answer('Видео файл слишком большой\n'
+                             'Отправьте другой или ',reply_markup=back_to_file_converter)
+    else:
+        await message.answer('Не много подождите, файл обрабатывается!')
+        new_video_file = open(f"{video_for_circle(file_id)}.MP4", 'rb').read()
+        circle_file = BufferedInputFile(new_video_file, f"circle_{file_id}.MP4")
+        await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.RECORD_VIDEO_NOTE)
+        try:
+            await message.bot.send_video_note(message.chat.id,
+                                              video_note=circle_file)
+
+            os.remove(f"{file_id}.MP4")
+            os.remove(f"circle_{file_id}.MP4")
+        except TelegramBadRequest:
+            os.remove(f"{file_id}.MP4")
+            os.remove(f"circle_{file_id}.MP4")
+            await message.answer('Я не могу отправить вам Кружочек или голосовое \n'
+                                 'пока вы не поправите настройки конфиденциальности')
+
+
+# @router.message(Command('sen_vid'))
+# async def video_to_circle_conv(message: Message, state: FSMContext):
+#     # new_video_file = open(f"{video_for_circle(file_id)}.MP4", 'rb').read()
+#     new_video_file = open(f"circle_123cas.mp4", 'rb').read()
+#     circle_file = BufferedInputFile(new_video_file, f"circle_123cas.MP4")
+#     await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.RECORD_VIDEO_NOTE)
+#     await message.bot.send_video_note(message.chat.id,
+#                                       video_note=circle_file)
 
 
 @router.message(File_converter_state.video_to_circle_state,
