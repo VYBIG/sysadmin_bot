@@ -141,7 +141,8 @@ async def ip_calc_state(message: Message, state: FSMContext):
                 min_ip = IPv4Address(soup[25].contents[0]) + 1
                 max_ip = soup[29].contents[0]
                 accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))
-
+                if str(ip.compressed).split("/")[-1] in ['31', '32']:
+                    accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))+1
             else:
                 main_ip = ip.ip
                 ip_type = ip_address_type(ip)
@@ -175,6 +176,10 @@ async def ip_calc_state(message: Message, state: FSMContext):
                                  reply_markup=back_to_main_menu)
         except NetmaskValueError:
             await message.answer('<b>Не корректная Маска</b> ⁉️\n'
+                                 'Повторите ввод:'
+                                 , reply_markup=back_to_main_menu)
+        except:
+            await message.answer('<b>Произошла какая-то ошибка</b> ⁉️\n'
                                  'Повторите ввод:'
                                  , reply_markup=back_to_main_menu)
     else:
@@ -212,6 +217,8 @@ async def ip_calc_state_with_bit(message: Message, state: FSMContext):
                 min_ip = IPv4Address(soup[25].contents[0]) + 1
                 max_ip = soup[29].contents[0]
                 accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))
+                if str(ip.compressed).split("/")[-1] in ['31', '32']:
+                    accessible_ip = int(str(soup[33].contents[0]).replace(',', ''))+1
 
             else:
                 main_ip = ip.ip
@@ -254,6 +261,10 @@ async def ip_calc_state_with_bit(message: Message, state: FSMContext):
                                  reply_markup=back_to_main_menu)
         except NetmaskValueError:
             await message.answer('<b>Не корректная Маска</b> ⁉️\n'
+                                 'Повторите ввод:'
+                                 , reply_markup=back_to_main_menu)
+        except:
+            await message.answer('<b>Произошла какая-то ошибка</b> ⁉️\n'
                                  'Повторите ввод:'
                                  , reply_markup=back_to_main_menu)
     else:
