@@ -15,7 +15,7 @@ router = Router(name=__name__)
 
 
 def ping(ip):
-    if ';' in ip or '|' in ip or '&' in ip:
+    if ';' in ip or '|' in ip or '&' in ip or '>' in ip:
         raise subprocess.CalledProcessError(returncode=2,cmd=f"ping -c 1 {ip}")
     process = subprocess.Popen(f"ping -c 1 {ip}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.wait()
@@ -32,7 +32,7 @@ class Tracert_state(StatesGroup):
 
 
 def trace_route(host):
-    if ';' in host or '|' in host or '&' in host:
+    if ';' in host or '|' in host or '&' in host '>' in host:
         raise subprocess.CalledProcessError(returncode=2,cmd=f"traceroute -I -m 12 {host}")
     return subprocess.check_output(f'traceroute -I -m 12 {host}',shell=True)
 
