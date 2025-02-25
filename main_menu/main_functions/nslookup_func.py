@@ -16,7 +16,7 @@ class Nslookup_state(StatesGroup):
 
 
 def ns_look_up(host, ip_or_host):
-    if ';' in host or '|' in host or '&' in host:
+    if ';' in host or '|' in host or '&' in host or '>' in host:
         raise subprocess.CalledProcessError(returncode=2, cmd=f"host {host}")
     if ip_or_host:
         return subprocess.check_output(f"host {host} " + "| grep 'has address' | awk '{ print $4 }'", shell=True)
