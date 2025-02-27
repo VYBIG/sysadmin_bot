@@ -1,6 +1,0 @@
-2024-11-09 21:40:14,008 INFO Start polling
-2024-11-09 21:40:14,211 INFO Run polling for bot @SysodminTest_bot id=7261051868 - 'SysodminеtestH_bot'
-2024-11-09 21:40:14,496 INFO time=Sat Nov  9 21:40:14 2024, user_id=643541689, user_full_name=Василий, user_pressed=ip_info, username = VY_BIG
-2024-11-09 21:40:14,605 INFO Update id=681032654 is handled. Duration 312 ms by bot id=7261051868
-2024-11-09 21:40:15,478 INFO time=Sat Nov  9 21:40:15 2024, user_id=643541689, user_full_name=Василий, user_message=192.88.99.1, username = VY_BIG
-2024-11-09 21:40:15,666 INFO Update id=681032655 is handled. Duration 202 ms by bot id=7261051868
