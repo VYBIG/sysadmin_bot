@@ -1,3 +1,9 @@
 sysadmins.txt
 users.db
 users.sqbpro
+.users.db
+__pycache__/
+.idea/
+main_menu/main_functions/__pycache__/
+main_menu/__pycache__/
+main_menu/base_commands/__pycache__/

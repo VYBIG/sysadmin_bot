@@ -1,6 +1,5 @@
 import logging
 import time
-import pytube
 from sql_func import *
 
 

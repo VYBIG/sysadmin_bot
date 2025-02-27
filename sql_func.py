@@ -31,7 +31,8 @@ class SQL_connect:
         curs = con.cursor()
         if curs.execute(f'SELECT * FROM Users WHERE User_ID == {user_id}') is None:
             con.close()
-            return False
+            return True
         else:
             con.close()
-            return True
+            return False
+
