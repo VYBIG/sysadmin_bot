@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, types
 from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -7,6 +7,7 @@ from aiogram.fsm.state import StatesGroup, State
 from kb import back_to_main_menu
 from aiogram.types import BufferedInputFile
 from common_functions import main_log
+import os
 
 router = Router(name=__name__)
 
@@ -29,14 +30,6 @@ async def command_help_handler(message: Message, state: FSMContext) -> None:
                          f"пока вы не нажмете /cancel\n"
                          f"или кнопку возвращения в основное меню",
                          reply_markup=back_to_main_menu)
-
-
-@router.message(Command('chat_gpt'))
-async def command_gpt(message: Message, state: FSMContext) -> None:
-    await state.clear()
-    main_log(message=message)
-    await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
-    await message.answer(f"Режим Нейросети находится в разработке! 🔜")
 
 
 @router.message(Command('get_id'))

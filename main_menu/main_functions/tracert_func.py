@@ -32,7 +32,7 @@ class Tracert_state(StatesGroup):
 
 
 def trace_route(host):
-    if ';' in host or '|' in host or '&' in host '>' in host:
+    if ';' in host or '|' in host or '&' in host or '>' in host:
         raise subprocess.CalledProcessError(returncode=2,cmd=f"traceroute -I -m 12 {host}")
     return subprocess.check_output(f'traceroute -I -m 12 {host}',shell=True)
 

@@ -26,8 +26,18 @@ async def file_conv(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.answer(cache_time=1)
     await state.set_state(File_converter_state.file_state_main)
-    await callback.message.answer('Выбери что нужно конвертировать',
-                                  reply_markup=file_converter_main)
+    await callback.message.edit_text('Функция в Разработке',
+                                     reply_markup=exit_menu_2)
+
+
+# @router.callback_query(F.data == 'file_converter')
+# async def file_conv(callback: CallbackQuery, state: FSMContext):
+#     main_log(callback=callback)
+#     await state.clear()
+#     await callback.answer(cache_time=1)
+#     await state.set_state(File_converter_state.file_state_main)
+#     await callback.message.answer('Выбери что нужно конвертировать',
+#                                   reply_markup=file_converter_main)
 
 
 @router.callback_query(File_converter_state.file_state_main,
@@ -50,10 +60,10 @@ async def video_to_circle_conv(message: Message, state: FSMContext):
     await message.bot.download(file_id, f"{file_id}.MP4")
     if message.video.duration >= 60:
         await message.answer('Видео Длиннее одной минуты\n'
-                             'Отправьте другой или ',reply_markup=back_to_file_converter)
+                             'Отправьте другой или ', reply_markup=back_to_file_converter)
     elif message.video.file_size >= 50000000:
         await message.answer('Видео файл слишком большой\n'
-                             'Отправьте другой или ',reply_markup=back_to_file_converter)
+                             'Отправьте другой или ', reply_markup=back_to_file_converter)
     else:
         await message.answer('Не много подождите, файл обрабатывается!')
         new_video_file = open(f"{video_for_circle(file_id)}.MP4", 'rb').read()

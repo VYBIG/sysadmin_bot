@@ -17,6 +17,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
     await message.bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
     main_log(message=message)
+
     await message.answer(f"Привет 👋, <b>{message.from_user.full_name}</b>! Я сетевой бот помощник 💡\n\n"
                          f"Выбери функцию которую ты хочешь использовать⬇️",
                          reply_markup=main_menu_1, parse_mode=ParseMode.HTML)
